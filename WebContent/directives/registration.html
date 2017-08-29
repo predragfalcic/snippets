@@ -1,0 +1,10 @@
+<div ng-controller="registerCtrl">
+		<input type="text" ng-model="user.username" placeholder="username" name="username">
+		<input type="password" ng-model="user.password" placeholder="password" name="password">
+		<input type="text" ng-model="user.firstName" placeholder="First name" name="firstName">
+		<input type="text" ng-model="user.lastName" placeholder="Last name" name="lastName">
+		<input type="email" ng-model="user.email" placeholder="Email" name="email">
+		<input type="number" ng-model="user.phoneNumber" placeholder="Phone number" name="phoneNumber">
+		<input type="text" ng-model="user.location" placeholder="Location" name="location" >
+		<button ng-click="register(user)">Register</button>
+</div>
