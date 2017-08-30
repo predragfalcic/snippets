@@ -8,14 +8,16 @@ public class User implements Serializable{
 	
 	private String username;
 	private String password;
-	private String role;
+	private String role; // Admin, regUser, guest
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String phoneNumber;
 	private String location;
 	private String profileImage;
-	
+	private String status; // Is the user blocked or not
+	private String token; // Users token
+
 	public User(String username, String password, String role, String firstName, String lastName, String email,
 			String phoneNumber, String location, String profileImage) {
 		super();
@@ -28,6 +30,7 @@ public class User implements Serializable{
 		this.phoneNumber = phoneNumber;
 		this.location = location;
 		this.profileImage = profileImage;
+		this.status = "Active";
 	}
 
 	public User() {
@@ -106,10 +109,26 @@ public class User implements Serializable{
 		this.profileImage = profileImage;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", role=" + role + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber + ", location="
-				+ location + ", profileImage=" + profileImage + "]";
+				+ location + ", profileImage=" + profileImage + ", status=" + status + ", token=" + token + "]";
 	}
 }

@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Login</title>
-</head>
-<body>
-
-</body>
-</html>
+<div ng-controller="loginCtrl">
+	<input type="text" ng-model="user.username" placeholder="Username" name="username"><br>
+	<input type="password" ng-model="user.password" placeholder="Password" name="password"><br>
+	<button ng-click="login()">Login</button>
+</div>

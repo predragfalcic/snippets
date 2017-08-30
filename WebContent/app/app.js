@@ -3,7 +3,7 @@
  */
 
 // Create modules
-var snippet = angular.module('snippet', ['ngRoute']);
+var snippet = angular.module('snippet', ['ngRoute', 'authentication']);
 
 snippet.config(function($routeProvider) {
 	$routeProvider.when('/',{
@@ -14,6 +14,9 @@ snippet.config(function($routeProvider) {
 	})
 	.when('/registration', {
 		templateUrl: 'directives/registration.html'
+	})
+	.when('/profile', {
+		templateUrl: 'directives/profile.html'
 	})
 	.otherwise({
 		redirectTo: '/'

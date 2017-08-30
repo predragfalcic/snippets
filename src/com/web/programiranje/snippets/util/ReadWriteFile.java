@@ -46,10 +46,12 @@ public class ReadWriteFile {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public List<User> readUserFromFile() throws ClassNotFoundException, IOException{
+	public List<User> readUserFromFile() throws FileNotFoundException, ClassNotFoundException, IOException{
 		List<User> users = new ArrayList<>();
 
-		FileInputStream fi = new FileInputStream(new File("users.txt"));
+		File f = new File("users.txt");
+		f.createNewFile();
+		FileInputStream fi = new FileInputStream(f);
 		ObjectInputStream oi = new ObjectInputStream(fi);
 
 		// Read objects
