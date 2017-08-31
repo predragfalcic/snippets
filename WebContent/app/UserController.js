@@ -25,13 +25,15 @@ snippet.controller('registerCtrl', function($scope, $http) {
             headers: {'Content-Type': undefined },
             transformRequest: angular.identity
         }).then(function(success) {
+        	toast(success.data);
             $location.path('/login');
         }).then(function(response){
-        	alert(response);
+        	alert(response.data);
         });
 	};
 });
 
+// Display login page and authenticate the user
 snippet.controller('loginCtrl', function($scope, AuthenticationService, $http, $location){
     $scope.user={};
     
@@ -40,24 +42,47 @@ snippet.controller('loginCtrl', function($scope, AuthenticationService, $http, $
     };
     function loginCbck(success) {
         if (success) {
-            alert("success");
+            alert("Welcome");
         }
         else{
-        	alert("error");
+        	alert("Ups! Something went wrong.");
         }
     };
 });
 
+// Display users profile page
 snippet.controller('profileCtrl', function($scope, AuthenticationService, $http, $location){
-
-    $scope.profile = AuthenticationService.getCurrentUser();
-    // Password reset
-    $scope.reset = function () {
-
-        var promise = $http.post("/rest/user/reset", $scope.account);
-        promise.then(function (response) {
-            $location.path("/profile");
-        });
-
-    };
+	
 });
+
+// Display administrator page with all options
+snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $location){
+	var vm = this;
+	
+	$scope.users = {}
+	
+	function getAllRegUsers() {
+		$http.get('rest/users/all')
+			.then(function (response) {
+	            $scope.users = response.data;
+	        });
+	};
+	
+	getAllRegUsers();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

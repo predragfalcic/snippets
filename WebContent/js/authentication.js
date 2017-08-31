@@ -25,16 +25,13 @@
                         // korisnicko ime, token i rola (ako postoji) cuvaju se u lokalnom skladištu
                         var currentUser = { username: username, token: response.data.token }
                         var tokenPayload = jwtHelper.decodeToken(response.data.token);
-
-
+                        
                         if(tokenPayload.role){
                             currentUser.role = tokenPayload.role;
                         }
                         if(tokenPayload.image){
                             currentUser.image = tokenPayload.image;
                         }
-
-                        
                         
                         // prijavljenog korisnika cuva u lokalnom skladistu
                         $localStorage.currentUser = currentUser;
@@ -42,16 +39,21 @@
                         $http.defaults.headers.common.Authorization = response.data.token;	
                         // callback za uspesan login
                         
+                        if(tokenPayload.role === "admin"){
+                        	$location.path("/admin");
+                        }else if(tokenPayload.role === "regUser"){
+                        	$location.path("/profile");
+                        }
+                        
                         callback(true);
                         
-                        $location.path('/profile');
                     } else {
                         // callback za neuspesan login
                         callback(false);
                     }
                 }, function errorCallback(response) {
+                	alert("usao je ovde");
                     console.log("Error")
-
                 });
         }
 

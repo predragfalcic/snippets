@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONObject;
 
 import com.web.programiranje.snippets.model.User;
@@ -149,7 +151,6 @@ public class UserRepository {
 	public void saveFile(InputStream uploadedInputStream, String serverLocation) {
 
         try {
-        	System.out.println("Usao je ovde");
             OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
             int read = 0;
             byte[] bytes = new byte[1024];
@@ -165,6 +166,37 @@ public class UserRepository {
         }
 
     }
+	
+	/**
+	 * Return all users if logged user is admin
+	 * @param request
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public List<User> getAllRegUsers(HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
+		
+		String role = JsonWebTokenImpl.parseRequest(request, "role");
+		
+		if(!role.equalsIgnoreCase("admin")){
+			return null;
+		}
+		
+		users.clear();
+		users = rwf.readUserFromFile();
+		
+		List<User> regUsers = new ArrayList<>();
+		
+		for (User user : users) {
+			System.out.println(user.toString());
+			if(user.getRole().equals("regUser")){
+				regUsers.add(user);
+			}
+		}
+		
+		return regUsers;
+	}
 }
 
 

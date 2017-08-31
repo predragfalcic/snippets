@@ -1,0 +1,23 @@
+<div ng-controller="adminCtrl">
+	<h3>All users</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>Role</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="user in users">
+				<td>{{user.username}}</td>
+				<td>{{user.role}}</td>
+				<td>{{user.status}}</td>
+				<td>
+					<button type="button" ng-click="vm.block_user(user)">block</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

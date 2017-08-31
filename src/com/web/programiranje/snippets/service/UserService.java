@@ -1,14 +1,18 @@
 package com.web.programiranje.snippets.service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -26,6 +30,8 @@ public class UserService {
 	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users//Privat//Desktop//Web Programiranje//img//";
 	private static final String DEFAULT_IMAGE = "C://Users//Privat//Desktop//Web Programiranje//img//default.png";
 	
+	@Context
+	HttpServletRequest request;
 	
 	@POST
 	@Path("/add")
@@ -34,8 +40,6 @@ public class UserService {
 	public String add(@FormDataParam("username") String username, @FormDataParam("password") String password, @FormDataParam("file") InputStream uploadedInputStream,
 			   @FormDataParam("file") FormDataContentDisposition fileDetail, @FormDataParam("firstName") String firstName, @FormDataParam("lastName") String lastName,
 			   @FormDataParam("email") String email, @FormDataParam("phone") String phone, @FormDataParam("location") String location) {
-		
-		System.out.println("Usao je ovde");
 		
 		try {
 			userRepository.readFromFile();
@@ -89,5 +93,12 @@ public class UserService {
         }
 		
 		return jo;
+	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> all_users() throws FileNotFoundException, ClassNotFoundException, IOException{
+		return userRepository.getAllRegUsers(request);
 	}
 }

@@ -53,7 +53,6 @@ public class JsonWebTokenImpl {
 
     }
 
-
     public static String parseRequest(HttpServletRequest request, String data){
         String response = "";
         if((request.getHeader("authorization")) == null || request.getHeader("authorization").equalsIgnoreCase("")){
