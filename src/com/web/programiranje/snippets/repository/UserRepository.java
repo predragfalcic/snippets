@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +20,7 @@ import com.web.programiranje.snippets.util.ReadWriteFile;
 public class UserRepository {
 	
 	private ReadWriteFile rwf = new ReadWriteFile(); 
-	private List<User> users = new ArrayList<>();
+	private ArrayList<User> users = new ArrayList<>();
 	
 	/**
 	 * Default constructor
@@ -63,12 +62,14 @@ public class UserRepository {
 		User foundUser = findUserByUsername(username);
 		if(foundUser == null){
 			jo.put("error", "User with that username does not exist.");
+			System.out.println("User with that username does not exist.");
 			return jo;
 		}
 		
 		// If user is found check if password is correct
 		if(!BCrypt.checkpw(password, foundUser.getPassword())){
 			jo.put("error", "Incorrect password");
+			System.out.println("Incorrect password");
 			return jo;
 		}
 		
@@ -102,7 +103,7 @@ public class UserRepository {
 	 * Return all users
 	 * @return
 	 */
-	public List<User> getUsers(){
+	public ArrayList<User> getUsers(){
 		return users;
 	}
 	
@@ -175,9 +176,11 @@ public class UserRepository {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public List<User> getAllRegUsers(HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
+	public ArrayList<User> getAllRegUsers(HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
 		
 		String role = JsonWebTokenImpl.parseRequest(request, "role");
+		
+		System.out.println("User sa rolom: " + role + " zeli sve korisnike da vidi");
 		
 		if(!role.equalsIgnoreCase("admin")){
 			return null;
@@ -186,7 +189,7 @@ public class UserRepository {
 		users.clear();
 		users = rwf.readUserFromFile();
 		
-		List<User> regUsers = new ArrayList<>();
+		ArrayList<User> regUsers = new ArrayList<>();
 		
 		for (User user : users) {
 			System.out.println(user.toString());
@@ -196,6 +199,74 @@ public class UserRepository {
 		}
 		
 		return regUsers;
+	}
+	
+	public String blockUser(String username, HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
+		String role = JsonWebTokenImpl.parseRequest(request, "role");
+		
+		System.out.println("User sa rolom: " + role + " zeli da blokira korisnika sa username " + username);
+		
+		if(!role.equalsIgnoreCase("admin")){
+			System.out.println("Nije admin");
+			return null;
+		}
+		
+		users = rwf.readUserFromFile();
+		
+		for (User user : users) {
+			if(user.getUsername().equals(username)){
+				if(user.getStatus().equals("Blocked")){
+					return "User is already blocked";
+				}else{
+					user.setStatus("Blocked");
+				}
+			}
+		}
+		
+		rwf.writeUserToFile(users);
+		
+		for (User user : users) {
+			System.out.println("Users status after block " + user.getStatus());
+		}
+		
+//		users.clear();
+//		users = rwf.readUserFromFile();
+		
+		return "OK";
+	}
+	
+	public String unblockUser(String username, HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
+		String role = JsonWebTokenImpl.parseRequest(request, "role");
+		
+		System.out.println("User sa rolom: " + role + " zeli da odblokira korisnika sa username " + username);
+		
+		if(!role.equalsIgnoreCase("admin")){
+			System.out.println("Nije admin");
+			return null;
+		}
+		
+		users = rwf.readUserFromFile();
+		
+		for (User user : users) {
+			if(user.getUsername().equals(username)){
+				if(user.getStatus().equals("Active")){
+					return "User is already active";
+				}else{
+					user.setStatus("Active");
+				}
+			}
+		}
+		
+		rwf.writeUserToFile(users);
+		
+		for (User user : users) {
+			System.out.println("Users status after unblock " + user.getStatus());
+		}
+		
+//		users.clear();
+//		users = rwf.readUserFromFile();
+		
+		return "OK";
 	}
 }
 

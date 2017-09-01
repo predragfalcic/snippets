@@ -2,7 +2,9 @@
  * User controller
  */
 
-snippet.controller('registerCtrl', function($scope, $http) {
+snippet.controller('registerCtrl', function($scope, AuthenticationService, $http) {
+	alert("current User: " + JSON.stringify(AuthenticationService.getCurrentUser()));
+	
 	// Write user to file
 	$scope.uploadFile = function(files) {
         $scope.user.file = files[0];
@@ -52,23 +54,38 @@ snippet.controller('loginCtrl', function($scope, AuthenticationService, $http, $
 
 // Display users profile page
 snippet.controller('profileCtrl', function($scope, AuthenticationService, $http, $location){
-	
+	var vm = this;
 });
 
 // Display administrator page with all options
 snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $location){
 	var vm = this;
+	$scope.users = []
 	
-	$scope.users = {}
-	
-	function getAllRegUsers() {
+	$scope.getAllRegUsers = function() {
 		$http.get('rest/users/all')
 			.then(function (response) {
 	            $scope.users = response.data;
 	        });
 	};
 	
-	getAllRegUsers();
+	$scope.getAllRegUsers();
+	
+	// Block user
+	$scope.blockUser = function(user){
+		var promise = $http.post("rest/users/block/" + user.username);
+        promise.then(function (response) {
+        	$scope.getAllRegUsers();
+        });
+	};
+	
+	// Unblock user
+	$scope.unblockUser = function(user){
+		var promise = $http.post("rest/users/unblock/" + user.username);
+        promise.then(function (response) {
+        	$scope.getAllRegUsers();
+        });
+	};
 });
 
 

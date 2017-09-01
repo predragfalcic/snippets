@@ -4,13 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -98,7 +99,43 @@ public class UserService {
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> all_users() throws FileNotFoundException, ClassNotFoundException, IOException{
+	public ArrayList<User> all_users() throws FileNotFoundException, ClassNotFoundException, IOException{
+		System.out.println("Vrati sve korisnike");
+		System.out.println(request.getHeader("authorization"));
 		return userRepository.getAllRegUsers(request);
+	}
+	
+	@POST
+	@Path("/block/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject blockUser(@PathParam("username") String username) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = userRepository.blockUser(username, request);
+		
+		if(response.equals("OK")){
+			jo.put("status", "User has been blocked");
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
+	
+	@POST
+	@Path("/unblock/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject unblockUser(@PathParam("username") String username) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = userRepository.unblockUser(username, request);
+		
+		if(response.equals("OK")){
+			jo.put("status", "User has been unblocked");
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
 	}
 }

@@ -26,7 +26,52 @@ snippet.config(function($routeProvider) {
 	});
 });
 
-snippet.config(function($logProvider){
-    $logProvider.debugEnabled(true);
-});
+snippet.run(run);
 
+function run($rootScope, $http, $location, $localStorage, AuthenticationService) {
+    // postavljanje tokena nakon refresh
+    if ($localStorage.currentUser) {
+        $http.defaults.headers.common.Authorization = $localStorage.currentUser.token;
+    }
+
+    $rootScope.logout = function () {
+        AuthenticationService.logout();
+    }
+
+    $rootScope.getCurrentUserRole = function () {
+        if (!AuthenticationService.getCurrentUser()){
+            return undefined;
+        }
+        else{
+            return AuthenticationService.getCurrentUser().role;
+        }
+    }
+    $rootScope.isLoggedIn = function () {
+        if (AuthenticationService.getCurrentUser()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    $rootScope.getCurrentUser = function () {
+        if (!AuthenticationService.getCurrentUser()){
+            return undefined;
+        }
+        else{
+            return AuthenticationService.getCurrentUser().username;
+
+        }
+    }
+
+    $rootScope.getCurrentUserImage = function () {
+        if (!AuthenticationService.getCurrentUser()){
+            return undefined;
+        }
+        else{
+            return AuthenticationService.getCurrentUser().image;
+
+        }
+    }
+}

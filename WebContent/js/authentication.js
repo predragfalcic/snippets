@@ -55,17 +55,35 @@
                 	alert("usao je ovde");
                     console.log("Error")
                 });
-        }
-
+        };
+        
         function logout() {
             // uklonimo korisnika iz lokalnog skladišta
             delete $localStorage.currentUser;
             $http.defaults.headers.common.Authorization = '';
-            //$state.go('login');
-        }
+        };
 
         function getCurrentUser() {
             return $localStorage.currentUser;
-        }
+        };
+        
+        function setHeader(){
+        	alert("Setting header for the request.");
+        	// If the user is logged in set the header for the request
+            if ($localStorage.currentUser) {
+                $http.defaults.headers.common.Authorization = $localStorage.currentUser.token;
+            }
+            return $localStorage.currentUser.token
+        };
+        
+        function isLoggedIn(){
+        	// postavljanje tokena nakon refresh
+            if ($localStorage.currentUser) {
+                return true;
+            }else{
+            	return false;
+            }
+        };
+        
     }
 })();

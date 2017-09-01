@@ -15,9 +15,12 @@
 				<td>{{user.role}}</td>
 				<td>{{user.status}}</td>
 				<td>
-					<button type="button" ng-click="vm.block_user(user)">block</button>
+					<button type="button" ng-if="user.status == 'Active'" ng-click="blockUser(user)">Block</button>
+					<button type="button" ng-if="user.status == 'Blocked'" ng-click="unblockUser(user)">Unblock</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	
+	<a href="#/logout" ng-click="logout()">Logout</a>
 </div>
