@@ -21,6 +21,9 @@ snippet.config(function($routeProvider) {
 	.when('/admin',{
 		templateUrl: 'directives/adminProfile.html'
 	})
+	.when('/snippets', {
+		templateUrl: 'directives/snippets.html'
+	})
 	.otherwise({
 		redirectTo: '/'
 	});

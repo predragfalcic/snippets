@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.web.programiranje.snippets.model.Language;
+import com.web.programiranje.snippets.model.Snippet;
 import com.web.programiranje.snippets.model.User;
 
 public class ReadWriteFile {
 	
 	private String usersFilePath = "C://Users//Privat//Desktop//Web Programiranje//data//users.txt";
 	private String languagesFilePath = "C://Users//Privat//Desktop//Web Programiranje//data//languages.txt";
+	private String snippetsFilePath = "C://Users//Privat//Desktop//Web Programiranje//data//snippets.txt";
 	
 	public ReadWriteFile(){}
 	
@@ -110,4 +112,47 @@ public class ReadWriteFile {
 		}
 		return languages;
 	}
+	
+	
+	
+	// Functions for reading and write snippets to file
+	
+	public void writeSnippetToFile(List<Snippet> snippets){
+		try {
+			FileOutputStream f = new FileOutputStream(new File(snippetsFilePath));
+			ObjectOutputStream o = new ObjectOutputStream(f);
+
+			// Write objects to file
+			o.writeObject(snippets);
+			
+			System.out.println("snippets saved.");
+			
+			o.close();
+			f.close();
+		}catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}catch (IOException e) {
+			System.out.println("Error initializing stream");
+		}
+	}
+	
+	public ArrayList<Snippet> readSnippetFromFile() throws FileNotFoundException, ClassNotFoundException, IOException{
+		ArrayList<Snippet> snippets = new ArrayList<>();
+
+		File f = new File(snippetsFilePath);
+		if(f.isFile() && f.length() > 0){
+			FileInputStream fi = new FileInputStream(f);
+			ObjectInputStream oi = new ObjectInputStream(fi);
+	
+			// Read objects
+			while (true) {
+				try{
+					Object o = oi.readObject();
+					snippets = ((ArrayList<Snippet>) o);
+				}catch (EOFException e){oi.close();return snippets;};
+			}
+		}
+		return snippets;
+	}
+	
 }

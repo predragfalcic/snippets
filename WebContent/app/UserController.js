@@ -109,6 +109,53 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 });
 
 
+//Display page for adding snippets and all snippets from database
+snippet.controller('snippetCtrl', function($scope, AuthenticationService, $http, $location){
+	var vm = this;
+	
+	$scope.snippets = []
+	$scope.languages = {}
+	
+	
+	
+	// Get all languages from file
+	$scope.getAllLanguages = function(){
+		$http.get('rest/users/languages/all')
+			.then(function(response){
+				$scope.languages = response.data;
+			});
+	}
+	
+	$scope.getAllLanguages();
+	
+	// Get all languages from file
+	$scope.getAllSnippets = function(){
+		$http.get('rest/users/snippets/all')
+			.then(function(response){
+				$scope.snippets = response.data;
+			});
+	}
+	
+	
+	$scope.getAllSnippets();
+	
+	$scope.snippet = {};
+	
+	$scope.language = {};
+	
+	// Add new Snippet
+	$scope.addSnippet = function(snippet){
+		$scope.snippet.language = $scope.language.name;
+		var promise = $http.post("rest/users/snippets/add/", $scope.snippet);
+		promise.then(function (response){
+			if(!(response.data.status === "OK")){
+				alert(response.data.status);
+			}
+			$scope.getAllSnippets();
+		});
+	}
+});
+
 
 
 

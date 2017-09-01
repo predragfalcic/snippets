@@ -21,8 +21,10 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONObject;
 
 import com.web.programiranje.snippets.model.Language;
+import com.web.programiranje.snippets.model.Snippet;
 import com.web.programiranje.snippets.model.User;
 import com.web.programiranje.snippets.repository.LanguageRepository;
+import com.web.programiranje.snippets.repository.SnippetRepository;
 import com.web.programiranje.snippets.repository.UserRepository;
 
 @Path("/users")
@@ -30,6 +32,7 @@ public class UserService {
 
 	private UserRepository userRepository = new UserRepository();
 	private LanguageRepository lr = new LanguageRepository();
+	private SnippetRepository sr = new SnippetRepository();
 	
 	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users//Privat//Desktop//Web Programiranje//img//";
 	private static final String DEFAULT_IMAGE = "C://Users//Privat//Desktop//Web Programiranje//img//default.png";
@@ -220,6 +223,39 @@ public class UserService {
 
 		if (response.equals("OK")) {
 			jo.put("status", "Language was added");
+		} else {
+			jo.put("status", response);
+		}
+
+		return jo;
+	}
+	
+	/**
+	 * Return a list with all snippets from database
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/snippets/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Snippet> getAllSnippets() throws FileNotFoundException, ClassNotFoundException, IOException{
+		return sr.getAllSnippets();
+	}
+	
+	@POST
+	@Path("/snippets/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject addSnippet(Snippet snippet) throws ClassNotFoundException, IOException{
+		sr.readFromFile();
+		JSONObject jo = new JSONObject();
+		
+		System.out.println(snippet.toString());
+		String response = sr.addSnippet(snippet.getDescription(), snippet.getCode(), snippet.getLanguage(), snippet.getUrl(), snippet.getExpiration(), request);
+
+		if (response.equals("OK")) {
+			jo.put("status", "OK");
 		} else {
 			jo.put("status", response);
 		}

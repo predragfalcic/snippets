@@ -30,6 +30,11 @@ public class LanguageRepository {
 		}
 	}
 	
+	/**
+	 * Find language by it's name
+	 * @param name
+	 * @return
+	 */
 	public Language findLanguageByName(String name){
 		System.out.println(languages.size());
 		// If language exists return it
@@ -41,12 +46,24 @@ public class LanguageRepository {
 		return null;
 	}
 	
+	/**
+	 * Read languages from file and return them as list
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public ArrayList<Language> getLanguages() throws FileNotFoundException, ClassNotFoundException, IOException{
 		languages.clear();
 		languages = rwf.readLanguageFromFile();
 		return languages;
 	}
 	
+	/**
+	 * Read data from file
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void readFromFile() throws ClassNotFoundException, IOException{
 		languages = rwf.readLanguageFromFile();
 	}

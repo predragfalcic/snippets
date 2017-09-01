@@ -1,0 +1,38 @@
+<div ng-controller="snippetCtrl">
+	<h3>All snippets</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Language</th>
+				<th>Url</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="s in snippets">
+				<td>{{s.description}}</td>
+				<td>{{s.language}}</td>
+				<td>{{s.url}}</td>
+				<td>
+					<button type="button">Details</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div>
+		<h3>Add new Language</h3><br>
+		<label>Enter description</label>
+		<input type="text" placeholder="Description" ng-model="snippet.description"><br>
+		<label>Enter code</label>
+		<input type="text" placeholder="Code" ng-model="snippet.code"><br>
+		<label>Select Language</label>
+		<select ng-model="language" ng-options="lang.name for lang in languages"></select><br>
+		<label>Enter url</label>
+		<input type="text" placeholder="Url" ng-model="snippet.url"><br>
+		<label>Enter expiration</label>
+		<input type="text" placeholder="Expiration" ng-model="snippet.expiration"><br>
+		<button ng-click="addSnippet(snippet)">Add snippet</button>
+	</div>
+	<a href="#/logout" ng-click="logout()">Logout</a>
+</div>
