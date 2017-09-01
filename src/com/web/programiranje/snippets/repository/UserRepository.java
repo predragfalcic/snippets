@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 
+import com.web.programiranje.snippets.model.Language;
 import com.web.programiranje.snippets.model.User;
 import com.web.programiranje.snippets.util.BCrypt;
 import com.web.programiranje.snippets.util.JsonWebTokenImpl;
@@ -40,7 +41,7 @@ public class UserRepository {
         String hashed = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt());
 		
         u.setPassword(hashed);
-        u.setRole("regUser");
+        u.setRole("admin");
 		users.add(u);
 		
 		rwf.writeUserToFile(users);
@@ -192,7 +193,7 @@ public class UserRepository {
 		ArrayList<User> regUsers = new ArrayList<>();
 		
 		for (User user : users) {
-			System.out.println(user.toString());
+//			System.out.println(user.toString());
 			if(user.getRole().equals("regUser")){
 				regUsers.add(user);
 			}

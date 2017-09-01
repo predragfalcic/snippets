@@ -11,11 +11,13 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.web.programiranje.snippets.model.Language;
 import com.web.programiranje.snippets.model.User;
 
 public class ReadWriteFile {
 	
 	private String usersFilePath = "C://Users//Privat//Desktop//Web Programiranje//data//users.txt";
+	private String languagesFilePath = "C://Users//Privat//Desktop//Web Programiranje//data//languages.txt";
 	
 	public ReadWriteFile(){}
 	
@@ -67,4 +69,45 @@ public class ReadWriteFile {
 		return users;
 	}
 	
+	
+	// Below are methods for languages
+	
+	
+	public void writeLanguageToFile(List<Language> languages){
+		try {
+			FileOutputStream f = new FileOutputStream(new File(languagesFilePath));
+			ObjectOutputStream o = new ObjectOutputStream(f);
+
+			// Write objects to file
+			o.writeObject(languages);
+			
+			System.out.println("languages saved.");
+			
+			o.close();
+			f.close();
+		}catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}catch (IOException e) {
+			System.out.println("Error initializing stream");
+		}
+	}
+	
+	public ArrayList<Language> readLanguageFromFile() throws FileNotFoundException, ClassNotFoundException, IOException{
+		ArrayList<Language> languages = new ArrayList<>();
+
+		File f = new File(languagesFilePath);
+		if(f.isFile() && f.length() > 0){
+			FileInputStream fi = new FileInputStream(f);
+			ObjectInputStream oi = new ObjectInputStream(fi);
+	
+			// Read objects
+			while (true) {
+				try{
+					Object o = oi.readObject();
+					languages = ((ArrayList<Language>) o);
+				}catch (EOFException e){oi.close();return languages;};
+			}
+		}
+		return languages;
+	}
 }

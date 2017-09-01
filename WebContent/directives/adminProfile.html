@@ -22,5 +22,26 @@
 		</tbody>
 	</table>
 	
+	<h3>All languages</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="language in languages">
+				<td>{{language.name}}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div>
+		<h3>Add new Language</h3>
+		<label>Enter the name of the language</label>
+		<input type="text" placeholder="Name of the language" ng-model="language.name">
+		<button ng-click="addLanguage(language)">Add language</button>
+	</div>
+	
 	<a href="#/logout" ng-click="logout()">Logout</a>
 </div>

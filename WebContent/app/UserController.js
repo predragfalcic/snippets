@@ -61,7 +61,9 @@ snippet.controller('profileCtrl', function($scope, AuthenticationService, $http,
 snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $location){
 	var vm = this;
 	$scope.users = []
+	$scope.languages = []
 	
+	// Get all registered users
 	$scope.getAllRegUsers = function() {
 		$http.get('rest/users/all')
 			.then(function (response) {
@@ -69,7 +71,16 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 	        });
 	};
 	
+	// Get all languages from file
+	$scope.getAllLanguages = function(){
+		$http.get('rest/users/languages/all')
+			.then(function(response){
+				$scope.languages = response.data;
+			});
+	}
+	
 	$scope.getAllRegUsers();
+	$scope.getAllLanguages();
 	
 	// Block user
 	$scope.blockUser = function(user){
@@ -86,6 +97,15 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
         	$scope.getAllRegUsers();
         });
 	};
+	
+	// Add new Language
+	$scope.addLanguage = function(language){
+		var promise = $http.post("rest/users/languages/add/" + language.name);
+		promise.then(function (response){
+			alert("language add: " + JSON.stringify(response.data));
+			$scope.getAllLanguages();
+		});
+	}
 });
 
 

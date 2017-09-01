@@ -20,13 +20,16 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONObject;
 
+import com.web.programiranje.snippets.model.Language;
 import com.web.programiranje.snippets.model.User;
+import com.web.programiranje.snippets.repository.LanguageRepository;
 import com.web.programiranje.snippets.repository.UserRepository;
 
 @Path("/users")
 public class UserService {
 
 	private UserRepository userRepository = new UserRepository();
+	private LanguageRepository lr = new LanguageRepository();
 	
 	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users//Privat//Desktop//Web Programiranje//img//";
 	private static final String DEFAULT_IMAGE = "C://Users//Privat//Desktop//Web Programiranje//img//default.png";
@@ -34,6 +37,19 @@ public class UserService {
 	@Context
 	HttpServletRequest request;
 	
+	/**
+	 * Register user with the data entered
+	 * @param username
+	 * @param password
+	 * @param uploadedInputStream
+	 * @param fileDetail
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param phone
+	 * @param location
+	 * @return
+	 */
 	@POST
 	@Path("/add")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -76,6 +92,11 @@ public class UserService {
 		return "User with username " + username + " registered";
 	}
 	
+	/**
+	 * Login the user if he exists and create token
+	 * @param u
+	 * @return
+	 */
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -96,15 +117,31 @@ public class UserService {
 		return jo;
 	}
 	
+	/**
+	 * Return a list of all registered users from data base
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<User> all_users() throws FileNotFoundException, ClassNotFoundException, IOException{
-		System.out.println("Vrati sve korisnike");
-		System.out.println(request.getHeader("authorization"));
+//		System.out.println("Vrati sve korisnike");
+//		System.out.println(request.getHeader("authorization"));
 		return userRepository.getAllRegUsers(request);
 	}
-	
+
+	/**
+	 * Block the user with the choosen username
+	 * @param username
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/block/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -122,6 +159,15 @@ public class UserService {
 		return jo;
 	}
 	
+	/**
+	 * Unblock the user that is blocked 
+	 * @param username
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/unblock/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -138,4 +184,47 @@ public class UserService {
 		
 		return jo;
 	}
+	
+	/**
+	 * Return a list with all languages from database
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/languages/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Language> getAllLanguages() throws FileNotFoundException, ClassNotFoundException, IOException{
+		return lr.getAllLanguages(request);
+	}
+	
+	/**
+	 * Add new language with the given name
+	 * if language with that name does not
+	 * already exist
+	 * @param name
+	 * @return
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	@POST
+	@Path("/languages/add/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject addLanguage(@PathParam("name") String name) throws ClassNotFoundException, IOException{
+		lr.readFromFile();
+		
+		JSONObject jo = new JSONObject();
+
+		String response = lr.addLanguage(name, request);
+
+		if (response.equals("OK")) {
+			jo.put("status", "Language was added");
+		} else {
+			jo.put("status", response);
+		}
+
+		return jo;
+	}
+	
 }
