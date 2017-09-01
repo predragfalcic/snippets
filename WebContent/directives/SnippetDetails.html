@@ -1,0 +1,22 @@
+<div ng-controller="snippetDetailsCtrl">
+	<h3>Snippets details</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Language</th>
+				<th>Url</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{s.description}}</td>
+				<td>{{s.language}}</td>
+				<td>{{s.url}}</td>
+				<td>{{s.user}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="#/logout" ng-click="logout()">Logout</a>
+</div>

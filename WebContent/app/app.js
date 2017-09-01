@@ -6,8 +6,8 @@
 var snippet = angular.module('snippet', ['ngRoute', 'authentication']);
 
 snippet.config(function($routeProvider) {
-	$routeProvider.when('/',{
-		templateUrl: 'directives/registration.html'
+	$routeProvider.when('/', {
+		templateUrl: 'directives/login.html'
 	})
 	.when('/login', {
 		templateUrl: 'directives/login.html'
@@ -23,6 +23,9 @@ snippet.config(function($routeProvider) {
 	})
 	.when('/snippets', {
 		templateUrl: 'directives/snippets.html'
+	})
+	.when('/details', {
+		templateUrl: 'directives/SnippetDetails.html'
 	})
 	.otherwise({
 		redirectTo: '/'

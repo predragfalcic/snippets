@@ -105,7 +105,7 @@ public class SnippetRepository {
 	}
 	
 	/**
-	 * Get all snippets from database
+	 * Get snipet from database
 	 * @param request
 	 * @return
 	 * @throws FileNotFoundException
@@ -118,5 +118,37 @@ public class SnippetRepository {
 		
 		
 		return snippets;
+	}
+	
+	/**
+	 * Return snippet if found one
+	 * @param s
+	 * @return
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public Snippet detailsSnippet(Snippet s) throws FileNotFoundException, ClassNotFoundException, IOException {
+		
+		snippets = rwf.readSnippetFromFile();
+		
+		Snippet newSnippet = findSnippet(s);
+
+		if(newSnippet == null){
+			return null;
+		}
+		
+		return newSnippet;
+	}
+	
+	public Snippet findSnippetById(String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		snippets = rwf.readSnippetFromFile();
+		
+		for (Snippet snippet : snippets) {
+			if(snippet.getId().equals(id)){
+				return snippet;
+			}
+		}
+		return null;
 	}
 }

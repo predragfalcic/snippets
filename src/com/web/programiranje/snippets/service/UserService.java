@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -250,6 +251,13 @@ public class UserService {
 	public JSONObject addSnippet(Snippet snippet) throws ClassNotFoundException, IOException{
 		sr.readFromFile();
 		JSONObject jo = new JSONObject();
+		if(snippet.getId() == null){
+			snippet.setId(Snippet.generateString(new Random(), "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM", 10));
+		}
+		
+		if(snippet.getLanguage() == null || snippet.getLanguage().length() == 0){
+			snippet.setLanguage("undefined");
+		}
 		
 		System.out.println(snippet.toString());
 		String response = sr.addSnippet(snippet.getDescription(), snippet.getCode(), snippet.getLanguage(), snippet.getUrl(), snippet.getExpiration(), request);
@@ -261,6 +269,16 @@ public class UserService {
 		}
 
 		return jo;
+	}
+	
+	@GET
+	@Path("/snippets/details/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Snippet getSnippet(@PathParam("id") String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		System.out.println(id);
+		Snippet foundSnippet = sr.findSnippetById(id);
+		System.out.println(foundSnippet.toString());
+		return foundSnippet;
 	}
 	
 }

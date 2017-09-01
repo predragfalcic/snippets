@@ -110,12 +110,11 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 
 
 //Display page for adding snippets and all snippets from database
-snippet.controller('snippetCtrl', function($scope, AuthenticationService, $http, $location){
+snippet.controller('snippetCtrl', function($window, $scope, AuthenticationService, $http, $location){
 	var vm = this;
 	
 	$scope.snippets = []
 	$scope.languages = {}
-	
 	
 	
 	// Get all languages from file
@@ -154,6 +153,29 @@ snippet.controller('snippetCtrl', function($scope, AuthenticationService, $http,
 			$scope.getAllSnippets();
 		});
 	}
+	
+	// Snippets details
+	$scope.detailsSnippet = function(snippet){
+		$window.sessionStorage.snippet_id = snippet.id;
+		$location.path('/details/');
+	}
+});
+
+//Display snippet details page
+snippet.controller('snippetDetailsCtrl', function($window, $scope, AuthenticationService, $http){
+	var vm = this;
+	
+	$scope.s = [];
+	
+	$scope.getSnippet = function(){
+		$http.get('rest/users/snippets/details/' + $window.sessionStorage.snippet_id)
+	        .then(function (response) {
+	            $scope.s = response.data;
+	        });
+	};
+	
+	$scope.getSnippet();
+	
 });
 
 

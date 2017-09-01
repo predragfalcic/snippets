@@ -6,6 +6,8 @@
 				<th>Description</th>
 				<th>Language</th>
 				<th>Url</th>
+				<th>User</th>
+				<th>Details</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -13,8 +15,9 @@
 				<td>{{s.description}}</td>
 				<td>{{s.language}}</td>
 				<td>{{s.url}}</td>
+				<td>{{s.user}}</td>
 				<td>
-					<button type="button">Details</button>
+					<a href="" type="button" ng-click="detailsSnippet(s)">Details</a>
 				</td>
 			</tr>
 		</tbody>

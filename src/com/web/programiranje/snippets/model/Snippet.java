@@ -1,6 +1,7 @@
 package com.web.programiranje.snippets.model;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Snippet implements Serializable{
 
@@ -9,6 +10,7 @@ public class Snippet implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private String id;
 	private String description;
 	private String code;
 	private String language;
@@ -22,6 +24,7 @@ public class Snippet implements Serializable{
 
 	public Snippet(String description, String code, String language, String url, String expiration, String username) {
 		super();
+		this.id = generateString(new Random(), "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM", 10);
 		this.description = description;
 		this.code = code;
 		this.language = language;
@@ -78,12 +81,20 @@ public class Snippet implements Serializable{
 		this.user = user;
 	}
 
-	@Override
-	public String toString() {
-		return "Snippet [description=" + description + ", code=" + code + ", language=" + language + ", url=" + url
-				+ ", expiration=" + expiration + ", user=" + user + "]";
+	public String getId() {
+		return id;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	@Override
+	public String toString() {
+		return "Snippet [id=" + id + ", description=" + description + ", code=" + code + ", language=" + language
+				+ ", url=" + url + ", expiration=" + expiration + ", user=" + user + "]";
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -91,6 +102,7 @@ public class Snippet implements Serializable{
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((expiration == null) ? 0 : expiration.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((language == null) ? 0 : language.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
@@ -121,6 +133,11 @@ public class Snippet implements Serializable{
 				return false;
 		} else if (!expiration.equals(other.expiration))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (language == null) {
 			if (other.language != null)
 				return false;
@@ -137,5 +154,15 @@ public class Snippet implements Serializable{
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+
+	public static String generateString(Random rng, String characters, int length)
+	{
+	    char[] text = new char[length];
+	    for (int i = 0; i < length; i++)
+	    {
+	        text[i] = characters.charAt(rng.nextInt(characters.length()));
+	    }
+	    return new String(text);
 	}
 }
