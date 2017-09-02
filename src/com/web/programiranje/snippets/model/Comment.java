@@ -43,6 +43,49 @@ public class Comment implements Serializable{
 		this.user = user;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dateTimeCommented == null) ? 0 : dateTimeCommented.hashCode());
+		result = prime * result + ((grade == null) ? 0 : grade.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Comment other = (Comment) obj;
+		if (dateTimeCommented == null) {
+			if (other.dateTimeCommented != null)
+				return false;
+		} else if (!dateTimeCommented.equals(other.dateTimeCommented))
+			return false;
+		if (grade == null) {
+			if (other.grade != null)
+				return false;
+		} else if (!grade.equals(other.grade))
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+
 	public Date getDateTimeCommented() {
 		return dateTimeCommented;
 	}
@@ -64,4 +107,5 @@ public class Comment implements Serializable{
 		return "Comment [text=" + text + ", user=" + user + ", dateTimeCommented=" + dateTimeCommented + ", grade="
 				+ grade + "]";
 	}
+	
 }

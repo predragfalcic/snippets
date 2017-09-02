@@ -376,4 +376,29 @@ public class UserService {
 		
 		return snippet;
 	}
+	
+	@POST
+	@Path("/snippets/{id}/comment/delete")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Snippet deleteComment(@PathParam("id") String id, Comment comment) throws ClassNotFoundException, IOException{
+		sr.readFromFile();
+		JSONObject jo = new JSONObject();
+		
+		// Find snippet
+		Snippet snippet = sr.findSnippetById(id);
+		
+		// Get all snippet comments
+		ArrayList<Comment> snippetComments = snippet.getComments();
+		
+		// Delete comment from the snippet
+		System.out.println(snippetComments.remove(comment));
+		
+		// Set the new list with comments to snippet
+		snippet.setComments(snippetComments);
+		
+		// Update snippet
+		String response = sr.updateSnippet(snippet);
+		
+		return snippet;
+	}
 }

@@ -44,4 +44,30 @@ public class Grade implements Serializable{
 	public String toString() {
 		return "Grade [positiveClicks=" + positiveClicks + ", negativeClicks=" + negativeClicks + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + negativeClicks;
+		result = prime * result + positiveClicks;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Grade other = (Grade) obj;
+		if (negativeClicks != other.negativeClicks)
+			return false;
+		if (positiveClicks != other.positiveClicks)
+			return false;
+		return true;
+	}
+	
 }

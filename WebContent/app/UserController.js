@@ -219,6 +219,12 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	// Snippets comments
 	$scope.comments = [];
 	
+	// Role of the user that is on this page
+	$scope.role;
+	
+	// Username of the user that is online
+	$scope.userUsername;
+	
 	// Get the selected snippet from database and display it's details
 	$scope.getSnippet = function(){
 		$http.get('rest/users/snippets/details/' + $window.sessionStorage.snippet_id)
@@ -226,6 +232,14 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	            $scope.s = response.data;
 	            $scope.comments = $scope.s.comments;
 	        });
+		// Get the current role of the user that is on this page
+		if(AuthenticationService.getCurrentUser() === undefined){
+			$scope.role = "Guest";
+		}else{
+			$scope.role = AuthenticationService.getCurrentUser().role;
+			var user = AuthenticationService.getCurrentUser();
+			$scope.userUsername = user.username;
+		}
 	};
 	
 	$scope.getSnippet();
@@ -252,7 +266,13 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	
 	// Delete any comment if user is admin
 	// If not then user can delete only his comments
-	
+	$scope.deleteComment = function(comment, snippet){
+		var promise = $http.post("rest/users/snippets/" + snippet.id + "/comment/delete/", comment);
+		promise.then(function (response){
+			$scope.s = response.data;
+			$scope.comments = $scope.s.comments;
+		})
+	}
 });
 
 
