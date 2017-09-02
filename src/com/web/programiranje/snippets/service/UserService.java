@@ -377,6 +377,14 @@ public class UserService {
 		return snippet;
 	}
 	
+	/**
+	 * Delete comments from snippet
+	 * @param id
+	 * @param comment
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/snippets/{id}/comment/delete")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -401,4 +409,58 @@ public class UserService {
 		
 		return snippet;
 	}
+	
+	@POST
+	@Path("/snippets/comments/block")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject blockComments(Snippet s) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		System.out.println("Should be blocked to comments");
+		
+		String response = sr.blockComments(s.getId());
+		
+		if(response.equals("OK")){
+			jo.put("status", "Comments have been blocked");
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
+	
+	/**
+	 * Unblock the user that is blocked 
+	 * @param username
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	@POST
+	@Path("/snippets/comments/unblock")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject unblockComments(Snippet s) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = sr.unblockComments(s.getId());
+		
+		if(response.equals("OK")){
+			jo.put("status", "User has been unblocked");
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
 }
+
+
+
+
+
+
+
+
+

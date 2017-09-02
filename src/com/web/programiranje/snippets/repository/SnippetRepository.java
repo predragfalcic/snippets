@@ -238,6 +238,52 @@ public class SnippetRepository {
 		
 		return "OK";
 	}
+	
+	/**
+	 * Disable commenting on this snippet
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public String blockComments(String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		for (Snippet snippet : snippets) {
+			if(snippet.getId().equals(id)){
+				snippet.setCanBeCommented(false);
+			}
+		}
+		
+		rwf.writeSnippetToFile(snippets);
+		
+		return "OK";
+	}
+	
+	/**
+	 * Enable commenting on this snippet
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public String unblockComments(String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		for (Snippet snippet : snippets) {
+			if(snippet.getId().equals(id)){
+				snippet.setCanBeCommented(true);
+			}
+		}
+		
+		rwf.writeSnippetToFile(snippets);
+		
+		return "OK";
+	}
 }
 
 

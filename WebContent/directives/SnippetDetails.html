@@ -20,15 +20,17 @@
 		</tbody>
 	</table>
 	<br>
-	<p>Tell us what you think about this snippet</p>
-	<label>Your comment</label><br>
-	<input type="text" ng-model="comment.text"><br>
-	<button ng-click="addComment(s, comment)">Comment</button><br>
+	<div ng-if="s.canBeCommented == true">
+		<p>Tell us what you think about this snippet</p>
+		<label>Your comment</label><br>
+		<input type="text" ng-model="comment.text"><br>
+		<button ng-click="addComment(s, comment)">Comment</button><br>
+	</div>
 	<h4>What other people think</h4>
 	<div ng-repeat="c in comments">
 		<label>Comment by: {{c.user}}</label><br>
 		<label>On: {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</label><br>
-		<textarea>{{c.text}}</textarea><br>
+		<textarea readonly="readonly">{{c.text}}</textarea><br>
 		<label>Number of positive grades: {{ c.grade.positiveClicks }}</label><br>
 		<label>Number of negative grades: {{ c.grade.negativeClicks }}</label><br>
 		<button ng-if="role == 'admin' || (role == 'regUser' && c.user == userUsername)" ng-click="deleteComment(c, s)">Delete comment</button>

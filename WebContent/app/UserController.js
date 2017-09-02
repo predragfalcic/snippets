@@ -208,6 +208,27 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 				$scope.getAllSnippets();
 			});
 	}
+	
+	// Disable comments
+	$scope.blockComments = function(snippet){
+//		alert("Snippet to be blocked " + snippet);
+		var promise = $http.post("rest/users/snippets/comments/block/", snippet);
+        promise.then(function (response) {
+        	alert(response.data);
+        	$scope.getAllSnippets();
+        })
+        .catch(function(error){
+        	alert(JSON.stringify(error));
+        });
+	};
+	
+	// Enable comments
+	$scope.unblockComments = function(snippet){
+		var promise = $http.post("rest/users/snippets/comments/unblock/", snippet);
+        promise.then(function (response) {
+        	$scope.getAllSnippets();
+        });
+	};
 });
 
 //Display snippet details page

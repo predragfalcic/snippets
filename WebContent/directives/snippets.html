@@ -9,6 +9,7 @@
 				<th>User</th>
 				<th>Details</th>
 				<th ng-if="userRole == 'admin'">Delete</th>
+				<th ng-if="userRole == 'admin'">Disable/Enable comments</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,12 +24,16 @@
 				<td>
 					<a ng-if="userRole == 'admin'" href="" type="button" ng-click="deleteSnippet(s)">Delete</a>
 				</td>
+				<td>
+					<a ng-if="userRole == 'admin' && s.canBeCommented == true" href="" type="button" ng-click="blockComments(s)">Disable</a>
+					<a ng-if="userRole == 'admin' && s.canBeCommented == false" href="" type="button" ng-click="unblockComments(s)">Enable</a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
 	
 	<div>
-		<h3>Add new Language</h3><br>
+		<h3>Add new Snippet</h3><br>
 		<label>Enter description</label>
 		<input type="text" placeholder="Description" ng-model="snippet.description"><br>
 		<label>Enter code</label>
