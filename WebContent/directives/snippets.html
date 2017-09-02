@@ -1,4 +1,5 @@
 <div ng-controller="snippetCtrl">
+	<a href="#/logout" ng-click="logout()">Logout</a>
 	<h3>All snippets</h3>
 	<table>
 		<thead>
@@ -32,8 +33,8 @@
 		</tbody>
 	</table>
 	
-	<div>
-		<h3>Add new Snippet</h3><br>
+	<div ng-if="status == 'Active'">
+		<h3>Add new Snippetttttt</h3><br>
 		<label>Enter description</label>
 		<input type="text" placeholder="Description" ng-model="snippet.description"><br>
 		<label>Enter code</label>
@@ -46,5 +47,5 @@
 		<input type="text" placeholder="Expiration" ng-model="snippet.expiration"><br>
 		<button ng-click="addSnippet(snippet)">Add snippet</button>
 	</div>
-	<a href="#/logout" ng-click="logout()">Logout</a>
+	
 </div>

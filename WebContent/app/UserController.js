@@ -152,10 +152,15 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	// If user is admin he can delete snippets from the list with all snippets
 	$scope.userRole = {}
 	
+	// Status to check if user is blocked 
+	$scope.status;
+	
 	if(AuthenticationService.getCurrentUser() === undefined){
 		$scope.userRole = "Guest";
 	}else{
-		$scope.userRole = AuthenticationService.getCurrentUser().role;
+		var user = AuthenticationService.getCurrentUser();
+		$scope.userRole = user.role;
+		$scope.status = user.status;
 	}
 	
 	// Get all languages from file
@@ -242,7 +247,8 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	
 	// Role of the user that is on this page
 	$scope.role;
-	
+	// Status to check if user is blocked 
+	$scope.status = "";
 	// Username of the user that is online
 	$scope.userUsername;
 	
@@ -259,6 +265,7 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 		}else{
 			$scope.role = AuthenticationService.getCurrentUser().role;
 			var user = AuthenticationService.getCurrentUser();
+			$scope.status = user.status;
 			$scope.userUsername = user.username;
 		}
 	};

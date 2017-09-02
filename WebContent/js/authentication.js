@@ -19,10 +19,11 @@
         function login(username, password, callback, $location) {
             $http.post('rest/users/login', { "username": username, "password": password, "role": "null" })
                 .then(function successCallback(response) {
+                	
                     // ukoliko postoji token, prijava je uspesna
                     if (response.data.token) {
-                    	
-                        // korisnicko ime, token i rola (ako postoji) cuvaju se u lokalnom skladištu
+
+                        // korisnicko ime, token, rola (ako postoji) i status cuvaju se u lokalnom skladištu
                         var currentUser = { username: username, token: response.data.token }
                         var tokenPayload = jwtHelper.decodeToken(response.data.token);
                         
@@ -32,19 +33,21 @@
                         if(tokenPayload.image){
                             currentUser.image = tokenPayload.image;
                         }
+                        if(tokenPayload.status){
+                        	currentUser.status = tokenPayload.status;
+                        }
                         
                         // prijavljenog korisnika cuva u lokalnom skladistu
                         $localStorage.currentUser = currentUser;
                         // jwt token dodajemo u to auth header za sve $http zahteve
                         $http.defaults.headers.common.Authorization = response.data.token;	
-                        // callback za uspesan login
                         
                         if(tokenPayload.role === "admin"){
                         	$location.path("/admin");
                         }else if(tokenPayload.role === "regUser"){
                         	$location.path("/snippets");
                         }
-                        
+//                        alert("Usao je ovde");
                         callback(true);
                         
                     } else {
@@ -52,7 +55,7 @@
                         callback(false);
                     }
                 }, function errorCallback(response) {
-                	alert("usao je ovde");
+//                	alert("usao je ovde");
                     console.log("Error")
                 });
         };

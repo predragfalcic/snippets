@@ -20,8 +20,8 @@
 		</tbody>
 	</table>
 	<br>
-	<div ng-if="s.canBeCommented == true">
-		<p>Tell us what you think about this snippet</p>
+	<div ng-if="s.canBeCommented == true && status == 'Active'">
+		<p>Tell us what you think about this snippettttt</p>
 		<label>Your comment</label><br>
 		<input type="text" ng-model="comment.text"><br>
 		<button ng-click="addComment(s, comment)">Comment</button><br>
