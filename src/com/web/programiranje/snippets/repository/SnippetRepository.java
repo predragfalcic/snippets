@@ -83,6 +83,7 @@ public class SnippetRepository {
 	 */
 	public String addSnippet(String description, String code, String lang, String url, String expiration, HttpServletRequest request){
 		
+		// Get the users username if he is loggedin or set the username as guest if the user is not logged in
 		String username = JsonWebTokenImpl.parseRequest(request, "user");
 
 		System.out.println("User sa usernamom: " + username + " zeli da doda snippet");
@@ -141,6 +142,14 @@ public class SnippetRepository {
 		return newSnippet;
 	}
 	
+	/**
+	 * Find snippet by given id
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public Snippet findSnippetById(String id) throws FileNotFoundException, ClassNotFoundException, IOException{
 		snippets = rwf.readSnippetFromFile();
 		
@@ -151,4 +160,51 @@ public class SnippetRepository {
 		}
 		return null;
 	}
+	
+	/**
+	 * Deletes snippet from database
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public String deleteSnippet(String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+//		System.out.println(id);
+		Snippet deletedSnippet = findSnippetById(id);
+		
+		if(deletedSnippet == null){
+			return "Snippet not found";
+		}
+		
+		snippets.remove(deletedSnippet);
+		
+		rwf.writeSnippetToFile(snippets);
+		
+		return "OK";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

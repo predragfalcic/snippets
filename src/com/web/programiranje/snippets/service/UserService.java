@@ -275,10 +275,24 @@ public class UserService {
 	@Path("/snippets/details/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Snippet getSnippet(@PathParam("id") String id) throws FileNotFoundException, ClassNotFoundException, IOException{
-		System.out.println(id);
 		Snippet foundSnippet = sr.findSnippetById(id);
-		System.out.println(foundSnippet.toString());
 		return foundSnippet;
 	}
 	
+	@GET
+	@Path("/snippets/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject deleteSnippet(@PathParam("id") String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = sr.deleteSnippet(id);
+		
+		if (response.equals("OK")) {
+			jo.put("status", "OK");
+		} else {
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
 }

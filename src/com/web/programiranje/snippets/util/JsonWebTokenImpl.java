@@ -33,7 +33,7 @@ public class JsonWebTokenImpl {
         return builder.compact();
     }
     
-  //Sample method to validate and read the JWT
+    //Sample method to validate and read the JWT
     public static JSONObject parseJWT(String jwt) {
 
         //This line will throw an exception if it is not a signed JWS (as expected)

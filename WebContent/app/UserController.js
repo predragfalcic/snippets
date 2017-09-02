@@ -108,7 +108,6 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 	}
 });
 
-
 //Display page for adding snippets and all snippets from database
 snippet.controller('snippetCtrl', function($window, $scope, AuthenticationService, $http, $location){
 	var vm = this;
@@ -158,6 +157,13 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	$scope.detailsSnippet = function(snippet){
 		$window.sessionStorage.snippet_id = snippet.id;
 		$location.path('/details/');
+	}
+	
+	$scope.deleteSnippet = function(snippet){
+		$http.get('rest/users/snippets/delete/' + snippet.id)
+			.then(function (response){
+				$scope.getAllSnippets();
+			});
 	}
 });
 

@@ -107,15 +107,6 @@ public class LanguageRepository {
 	 * @throws IOException
 	 */
 	public ArrayList<Language> getAllLanguages(HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
-		String role = JsonWebTokenImpl.parseRequest(request, "role");
-
-		System.out.println("User sa rolom: " + role + " zeli da vidi programske jezike");
-
-		if (!role.equalsIgnoreCase("admin")) {
-			System.out.println("Nije admin");
-			return null;
-		}
-		
 		languages.clear();
 		languages = rwf.readLanguageFromFile();
 		
