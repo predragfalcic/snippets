@@ -1,4 +1,32 @@
 <div ng-controller="profileCtrl">
-	<h1>Welcomeeeeee {{ profile.token.role }}</h1>
+	<h3>Your snippets</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Language</th>
+				<th>Url</th>
+				<th>User</th>
+				<th>Details</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="s in snippets">
+				<td>{{s.description}}</td>
+				<td>{{s.language}}</td>
+				<td>{{s.url}}</td>
+				<td>{{s.user}}</td>
+				<td>
+					<a href="" type="button" ng-click="detailsSnippet(s)">Details</a>
+				</td>
+				<td>
+					<a href="" type="button" ng-click="deleteSnippet(s)">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="#/snippets">All snippets</a><br>
 	<a href="#/logout" ng-click="logout()">Logout</a>
+	
 </div>

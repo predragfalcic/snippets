@@ -1,6 +1,7 @@
 package com.web.programiranje.snippets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Snippet implements Serializable{
@@ -16,7 +17,9 @@ public class Snippet implements Serializable{
 	private String language;
 	private String url;
 	private String expiration;
-	private String user; // Korisnik koji je kreirao snippet
+	private String user; // User that created snippet
+	private Boolean canBeCommented; // Snippet can be commented, default true
+	private ArrayList<Comment> comments; // Comments on this snippets
 	
 	public Snippet() {
 		super();
@@ -31,6 +34,8 @@ public class Snippet implements Serializable{
 		this.url = url;
 		this.expiration = expiration;
 		this.user = username;
+		this.canBeCommented = true;
+		this.comments = new ArrayList<>();
 	}
 
 	public String getDescription() {
@@ -89,16 +94,27 @@ public class Snippet implements Serializable{
 		this.id = id;
 	}
 	
-	@Override
-	public String toString() {
-		return "Snippet [id=" + id + ", description=" + description + ", code=" + code + ", language=" + language
-				+ ", url=" + url + ", expiration=" + expiration + ", user=" + user + "]";
+	public Boolean getCanBeCommented() {
+		return canBeCommented;
+	}
+
+	public void setCanBeCommented(Boolean canBeCommented) {
+		this.canBeCommented = canBeCommented;
 	}
 	
+	public ArrayList<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<Comment> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((canBeCommented == null) ? 0 : canBeCommented.hashCode());
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((expiration == null) ? 0 : expiration.hashCode());
@@ -118,6 +134,11 @@ public class Snippet implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Snippet other = (Snippet) obj;
+		if (canBeCommented == null) {
+			if (other.canBeCommented != null)
+				return false;
+		} else if (!canBeCommented.equals(other.canBeCommented))
+			return false;
 		if (code == null) {
 			if (other.code != null)
 				return false;
@@ -154,6 +175,13 @@ public class Snippet implements Serializable{
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Snippet [id=" + id + ", description=" + description + ", code=" + code + ", language=" + language
+				+ ", url=" + url + ", expiration=" + expiration + ", user=" + user + ", canBeCommented="
+				+ canBeCommented + ", comments=" + comments + "]";
 	}
 
 	public static String generateString(Random rng, String characters, int length)

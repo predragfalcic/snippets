@@ -53,8 +53,42 @@ snippet.controller('loginCtrl', function($scope, AuthenticationService, $http, $
 });
 
 // Display users profile page
-snippet.controller('profileCtrl', function($scope, AuthenticationService, $http, $location){
+snippet.controller('profileCtrl', function($window, $scope, AuthenticationService, $http, $location){
 	var vm = this;
+	
+	// Get all languages from file
+	$scope.getAllLanguages = function(){
+		$http.get('rest/users/languages/all')
+			.then(function(response){
+				$scope.languages = response.data;
+			});
+	}
+	
+	$scope.getAllLanguages();
+	
+	// Get all snippets from file for the current user
+	$scope.getAllSnippets = function(){
+		$http.get('rest/users/snippets/user/all')
+			.then(function(response){
+				$scope.snippets = response.data;
+			});
+	}
+	
+	// Snippets details
+	$scope.detailsSnippet = function(snippet){
+		$window.sessionStorage.snippet_id = snippet.id;
+		$location.path('/details/');
+	}
+	
+	// Delete selected snippet
+	$scope.deleteSnippet = function(snippet){
+		$http.get('rest/users/snippets/delete/' + snippet.id)
+			.then(function (response){
+				$scope.getAllSnippets();
+			});
+	}
+	
+	$scope.getAllSnippets();
 });
 
 // Display administrator page with all options
@@ -114,7 +148,15 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	
 	$scope.snippets = []
 	$scope.languages = {}
+	// Get the role of the logged in user
+	// If user is admin he can delete snippets from the list with all snippets
+	$scope.userRole = {}
 	
+	if(AuthenticationService.getCurrentUser() === undefined){
+		$scope.userRole = "Guest";
+	}else{
+		$scope.userRole = AuthenticationService.getCurrentUser().role;
+	}
 	
 	// Get all languages from file
 	$scope.getAllLanguages = function(){
@@ -159,6 +201,7 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 		$location.path('/details/');
 	}
 	
+	// Delete selected snippet
 	$scope.deleteSnippet = function(snippet){
 		$http.get('rest/users/snippets/delete/' + snippet.id)
 			.then(function (response){
@@ -173,14 +216,42 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	
 	$scope.s = [];
 	
+	// Snippets comments
+	$scope.comments = [];
+	
+	// Get the selected snippet from database and display it's details
 	$scope.getSnippet = function(){
 		$http.get('rest/users/snippets/details/' + $window.sessionStorage.snippet_id)
 	        .then(function (response) {
 	            $scope.s = response.data;
+	            $scope.comments = $scope.s.comments;
 	        });
 	};
 	
 	$scope.getSnippet();
+	
+	// Add new Comment to snippet
+	$scope.addComment = function(snippet, comment){
+		// Set comments user to Guest if user is not logged in
+		// Or to users username if he is logged in
+		var username = "";
+		if(AuthenticationService.getCurrentUser() === undefined){
+			username = "Guest";
+		}else{
+			username = AuthenticationService.getCurrentUser().username;
+		}
+		comment.user = username;
+		
+		// Make a post call to service to save the comment
+		var promise = $http.post("rest/users/snippets/" + snippet.id + "/comment/add/", comment);
+		promise.then(function (response){
+			$scope.s = response.data;
+			$scope.comments = $scope.s.comments;
+		});
+	}
+	
+	// Delete any comment if user is admin
+	// If not then user can delete only his comments
 	
 });
 

@@ -42,7 +42,7 @@
                         if(tokenPayload.role === "admin"){
                         	$location.path("/admin");
                         }else if(tokenPayload.role === "regUser"){
-                        	$location.path("/profile");
+                        	$location.path("/snippets");
                         }
                         
                         callback(true);
@@ -84,6 +84,5 @@
             	return false;
             }
         };
-        
     }
 })();

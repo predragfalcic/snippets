@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONObject;
 
+import com.web.programiranje.snippets.model.Comment;
+import com.web.programiranje.snippets.model.Grade;
 import com.web.programiranje.snippets.model.Language;
 import com.web.programiranje.snippets.model.Snippet;
 import com.web.programiranje.snippets.model.User;
@@ -245,16 +248,40 @@ public class UserService {
 		return sr.getAllSnippets();
 	}
 	
+	/**
+	 * Get snippets for the current user
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/snippets/user/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Snippet> getAllUsersSnippets() throws FileNotFoundException, ClassNotFoundException, IOException{
+		return sr.getAllUserSnippets(request);
+	}
+	
+	/**
+	 * Add snippet to database
+	 * @param snippet
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/snippets/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject addSnippet(Snippet snippet) throws ClassNotFoundException, IOException{
 		sr.readFromFile();
 		JSONObject jo = new JSONObject();
+		
+		// If snippet does not have id generate one
 		if(snippet.getId() == null){
 			snippet.setId(Snippet.generateString(new Random(), "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM", 10));
 		}
 		
+		// If snippet language is null set it to undefined
 		if(snippet.getLanguage() == null || snippet.getLanguage().length() == 0){
 			snippet.setLanguage("undefined");
 		}
@@ -271,14 +298,31 @@ public class UserService {
 		return jo;
 	}
 	
+	/**
+	 * Display the details for the selected snippet
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	@GET
 	@Path("/snippets/details/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Snippet getSnippet(@PathParam("id") String id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		System.out.println(id);
 		Snippet foundSnippet = sr.findSnippetById(id);
 		return foundSnippet;
 	}
 	
+	/**
+	 * Delete selected snippet
+	 * @param id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	@GET
 	@Path("/snippets/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -294,5 +338,42 @@ public class UserService {
 		}
 		
 		return jo;
+	}
+	
+	/**
+	 * Find the snippet that should be commented 
+	 * Add comment to the found snippet
+	 * Save snippet in database
+	 * @param comment
+	 * @param id
+	 * @return Snippet
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	@POST
+	@Path("/snippets/{id}/comment/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Snippet addComment(@PathParam("id") String id, Comment comment) throws ClassNotFoundException, IOException{
+		sr.readFromFile();
+		JSONObject jo = new JSONObject();
+		
+		// Find snippet which is commented
+		Snippet snippet = sr.findSnippetById(id);
+		
+		// Get all snippet comments
+		ArrayList<Comment> snippetComments = snippet.getComments();
+	
+		// Add new comment to the list
+		snippetComments.add(new Comment(comment.getText(), comment.getUser(), new Date(), new Grade()));
+		
+		// Set the new list with comments to snippet
+		snippet.setComments(snippetComments);
+		
+//		System.out.println(snippet.toString());
+		
+		// Update snippet
+		String response = sr.updateSnippet(snippet);
+		
+		return snippet;
 	}
 }

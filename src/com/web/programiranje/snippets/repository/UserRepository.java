@@ -41,7 +41,7 @@ public class UserRepository {
         String hashed = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt());
 		
         u.setPassword(hashed);
-        u.setRole("admin");
+        u.setRole("regUser");
 		users.add(u);
 		
 		rwf.writeUserToFile(users);

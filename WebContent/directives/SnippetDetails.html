@@ -1,4 +1,5 @@
 <div ng-controller="snippetDetailsCtrl">
+	<a href="#/logout" ng-click="logout()">Logout</a>
 	<h3>Snippets details</h3>
 	<table>
 		<thead>
@@ -18,5 +19,18 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="#/logout" ng-click="logout()">Logout</a>
-</div>
+	<br>
+	<p>Tell us what you think about this snippet</p>
+	<label>Your comment</label><br>
+	<input type="text" ng-model="comment.text"><br>
+	<button ng-click="addComment(s, comment)">Comment</button><br>
+	<h4>What other people think</h4>
+	<div ng-repeat="c in comments">
+		<label>Comment by: {{c.user}}</label><br>
+		<label>On: {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</label><br>
+		<textarea>{{c.text}}</textarea><br>
+		<label>Number of positive grades: {{ c.grade.positiveClicks }}</label><br>
+		<label>Number of negative grades: {{ c.grade.negativeClicks }}</label><br>
+		<hr>
+	</div>
+</div> 

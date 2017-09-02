@@ -30,6 +30,34 @@ public class SnippetRepository {
 	}
 	
 	/**
+	 * Update snippet 
+	 * @param s
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public String updateSnippet(Snippet s) throws FileNotFoundException, ClassNotFoundException, IOException{
+		// Clear the list and read all snippets from file
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		// Find snippet to be updated
+		for (Snippet snippet : snippets) {
+			// Snippet was found
+			if(snippet.getId().equals(s.getId())){
+				// Set the old snippet as the new one
+				snippet.setComments(s.getComments());;
+			}
+		}
+	
+		// Save new snippets to file
+		rwf.writeSnippetToFile(snippets);
+		
+		return "OK";
+	}
+	
+	/**
 	 * Find Snippet by it's description
 	 * @param description
 	 * @return
@@ -119,6 +147,33 @@ public class SnippetRepository {
 		
 		
 		return snippets;
+	}
+	
+	/**
+	 * Get all snippets that the current user created
+	 * @param request
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public ArrayList<Snippet> getAllUserSnippets(HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException{
+		// Get the users username if he is loggedin
+		String username = JsonWebTokenImpl.parseRequest(request, "user");
+		
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		ArrayList<Snippet> usersSnippets = new ArrayList<>();
+		
+		// Get all snippets for the user with the found username
+		for (Snippet snippet : snippets) {
+			if(snippet.getUser().equals(username)){
+				usersSnippets.add(snippet);
+			}
+		}
+		
+		return usersSnippets;
 	}
 	
 	/**
