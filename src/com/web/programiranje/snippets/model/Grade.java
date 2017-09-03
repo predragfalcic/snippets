@@ -1,6 +1,7 @@
 package com.web.programiranje.snippets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Grade implements Serializable{
 
@@ -11,11 +12,13 @@ public class Grade implements Serializable{
 
 	private int positiveClicks;
 	private int negativeClicks;
+	private ArrayList<User> users;
 	
 	public Grade() {
 		super();
 		this.positiveClicks = 0;
 		this.negativeClicks = 0;
+		this.users = new ArrayList<>();
 	}
 	
 	public Grade(int positiveClicks, int negativeClicks) {
@@ -40,9 +43,18 @@ public class Grade implements Serializable{
 		this.negativeClicks = negativeClicks;
 	}
 
+	public ArrayList<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
+	}
+
 	@Override
 	public String toString() {
-		return "Grade [positiveClicks=" + positiveClicks + ", negativeClicks=" + negativeClicks + "]";
+		return "Grade [positiveClicks=" + positiveClicks + ", negativeClicks=" + negativeClicks + ", users=" + users
+				+ "]";
 	}
 
 	@Override
@@ -51,6 +63,7 @@ public class Grade implements Serializable{
 		int result = 1;
 		result = prime * result + negativeClicks;
 		result = prime * result + positiveClicks;
+		result = prime * result + ((users == null) ? 0 : users.hashCode());
 		return result;
 	}
 
@@ -67,7 +80,11 @@ public class Grade implements Serializable{
 			return false;
 		if (positiveClicks != other.positiveClicks)
 			return false;
+		if (users == null) {
+			if (other.users != null)
+				return false;
+		} else if (!users.equals(other.users))
+			return false;
 		return true;
 	}
-	
 }

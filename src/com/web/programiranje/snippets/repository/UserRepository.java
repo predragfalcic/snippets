@@ -48,7 +48,7 @@ public class UserRepository {
 		
 	}
 	
-	public JSONObject login(String username, String password){
+	public JSONObject login(String username, String password) throws FileNotFoundException, ClassNotFoundException, IOException{
 		System.out.println("login(username, password)");
 		try {
 			readFromFile();
@@ -112,8 +112,14 @@ public class UserRepository {
 	 * Find user by his username
 	 * @param username
 	 * @return
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
 	 */
-	public User findUserByUsername(String username){
+	public User findUserByUsername(String username) throws FileNotFoundException, ClassNotFoundException, IOException{
+		users.clear();
+		users = rwf.readUserFromFile();
+		
 		for (User user : users) {
 			if(user.getUsername().equals(username)){
 				return user;

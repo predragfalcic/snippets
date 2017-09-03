@@ -56,6 +56,9 @@ public class UserService {
 	 * @param phone
 	 * @param location
 	 * @return
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
 	 */
 	@POST
 	@Path("/add")
@@ -63,7 +66,7 @@ public class UserService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public String add(@FormDataParam("username") String username, @FormDataParam("password") String password, @FormDataParam("file") InputStream uploadedInputStream,
 			   @FormDataParam("file") FormDataContentDisposition fileDetail, @FormDataParam("firstName") String firstName, @FormDataParam("lastName") String lastName,
-			   @FormDataParam("email") String email, @FormDataParam("phone") String phone, @FormDataParam("location") String location) {
+			   @FormDataParam("email") String email, @FormDataParam("phone") String phone, @FormDataParam("location") String location) throws FileNotFoundException, ClassNotFoundException, IOException {
 		
 		try {
 			userRepository.readFromFile();
@@ -103,12 +106,15 @@ public class UserService {
 	 * Login the user if he exists and create token
 	 * @param u
 	 * @return
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
 	 */
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public JSONObject login(User u){
+	public JSONObject login(User u) throws FileNotFoundException, ClassNotFoundException, IOException{
 		System.out.println("User to be logged in: " + u.getUsername() + " - " + u.getPassword());
 		JSONObject jo = new JSONObject();
 		jo = userRepository.login(u.getUsername(), u.getPassword());
@@ -448,6 +454,25 @@ public class UserService {
 		
 		if(response.equals("OK")){
 			jo.put("status", "User has been unblocked");
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
+	
+	@POST
+	@Path("/snippets/{s_id}/{user_id}/comments/like")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject likeComments(@PathParam("s_id") String s_id, @PathParam("user_id") String user_id, Comment c) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = sr.likeComment(s_id, c, user_id);
+		
+		Snippet s = sr.findSnippetById(s_id);
+		
+		if(response.equals("OK")){
+			jo.put("status", s);
 		}else{
 			jo.put("status", response);
 		}

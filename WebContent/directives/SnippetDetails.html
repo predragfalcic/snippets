@@ -31,8 +31,8 @@
 		<label>Comment by: {{c.user}}</label><br>
 		<label>On: {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</label><br>
 		<textarea readonly="readonly">{{c.text}}</textarea><br>
-		<label>Number of positive grades: {{ c.grade.positiveClicks }}</label><br>
-		<label>Number of negative grades: {{ c.grade.negativeClicks }}</label><br>
+		<label>Number of positive grades: {{ c.grade.positiveClicks }}</label><a href="" ng-if="role != 'Guest'" ng-click="likeComment(c, s)">Like</a><br>
+		<label>Number of negative grades: {{ c.grade.negativeClicks }}</label><a href="" ng-if="role != 'Guest'">Dislike</a><br>
 		<button ng-if="role == 'admin' || (role == 'regUser' && c.user == userUsername)" ng-click="deleteComment(c, s)">Delete comment</button>
 		<hr>
 	</div>

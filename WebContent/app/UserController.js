@@ -157,6 +157,7 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	
 	if(AuthenticationService.getCurrentUser() === undefined){
 		$scope.userRole = "Guest";
+		$scope.status = "Active";
 	}else{
 		var user = AuthenticationService.getCurrentUser();
 		$scope.userRole = user.role;
@@ -262,6 +263,7 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 		// Get the current role of the user that is on this page
 		if(AuthenticationService.getCurrentUser() === undefined){
 			$scope.role = "Guest";
+			$scope.status = "Active";
 		}else{
 			$scope.role = AuthenticationService.getCurrentUser().role;
 			var user = AuthenticationService.getCurrentUser();
@@ -299,6 +301,19 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 		promise.then(function (response){
 			$scope.s = response.data;
 			$scope.comments = $scope.s.comments;
+		})
+	}
+	
+	// Like comment
+	$scope.likeComment = function(comment, snippet){
+		var promise = $http.post("rest/users/snippets/" + snippet.id + "/" + $scope.userUsername +"/comments/like/", comment);
+		promise.then(function (response){
+			if(response.data.status === "You already liked this comment"){
+				alert(response.data.status);
+			}else{
+				$scope.s = response.data.status;
+				$scope.comments = $scope.s.comments;
+			}
 		})
 	}
 });
