@@ -287,6 +287,8 @@ public class UserService {
 			snippet.setId(Snippet.generateString(new Random(), "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM", 10));
 		}
 		
+		System.out.println(snippet.getLanguage());
+		
 		// If snippet language is null set it to undefined
 		if(snippet.getLanguage() == null || snippet.getLanguage().length() == 0){
 			snippet.setLanguage("undefined");
@@ -493,6 +495,17 @@ public class UserService {
 		return jo;
 	}
 	
+	/**
+	 * Dislike comment if user didn't already liked or disliked it
+	 * @param s_id
+	 * @param user_id
+	 * @param c
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/snippets/{s_id}/{user_id}/comments/dislike")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -507,6 +520,49 @@ public class UserService {
 			jo.put("status", s);
 		}else{
 			jo.put("status", response);
+		}
+		
+		return jo;
+	}
+	
+	/**
+	 * Find snippets by the given description
+	 * @param desc
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/snippets/search/{desc}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject searchSnippetsByDescription(@PathParam("desc") String desc) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		ArrayList<Snippet> foundSnippets = sr.searchSnippetsByDescription(desc);
+		
+		if(foundSnippets.size() == 0){
+			jo.put("status", "No snippets found");
+		}else{
+			jo.put("status", foundSnippets);
+		}
+		
+		return jo;
+	}
+	
+	@GET
+	@Path("/snippets/search/lang/{l}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject searchSnippetsByLanguage(@PathParam("l") String l) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		ArrayList<Snippet> foundSnippets = sr.searchSnippetsByLanguage(l);
+		
+		if(foundSnippets.size() == 0){
+			jo.put("status", "No snippets found");
+		}else{
+			jo.put("status", foundSnippets);
 		}
 		
 		return jo;

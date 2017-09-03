@@ -121,6 +121,8 @@ public class SnippetRepository {
 
 		System.out.println("User sa usernamom: " + username + " zeli da doda snippet");
 		
+		System.out.println("Language " + lang);
+		
 		// Set language undefined if not selected
 		if(!(lang.length() > 0)){
 			lang = "undefined";
@@ -400,7 +402,56 @@ public class SnippetRepository {
 		
 		return "OK";
 	}
-}
+	
+	/**
+	 * Find snippets by description and add them to list
+	 * @param desc
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public ArrayList<Snippet> searchSnippetsByDescription(String desc) throws FileNotFoundException, ClassNotFoundException, IOException{
+		
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		ArrayList<Snippet> foundSnippets = new ArrayList<>();
+		
+		for (Snippet snippet : snippets) {
+			if(snippet.getDescription().contains(desc)){
+				foundSnippets.add(snippet);
+			}
+		}
+		
+		return foundSnippets;
+	}
+	
+	/**
+	 * Find snippets by language
+	 * @param l
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public ArrayList<Snippet> searchSnippetsByLanguage(String l) throws FileNotFoundException, ClassNotFoundException, IOException{
+			
+			snippets.clear();
+			snippets = rwf.readSnippetFromFile();
+			
+			ArrayList<Snippet> foundSnippets = new ArrayList<>();
+			
+			for (Snippet snippet : snippets) {
+				System.out.println(snippet.toString());
+				if(snippet.getLanguage().equals(l)){
+					foundSnippets.add(snippet);
+				}
+			}
+			
+			return foundSnippets;
+		}
+	}
 
 
 

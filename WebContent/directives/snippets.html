@@ -33,14 +33,23 @@
 		</tbody>
 	</table>
 	
+	<!-- Search snippets by description -->
+	<div>
+		<h3>Enter description or some text from description of the snippet you want to find</h3>
+		<input type="text" placeholder="Description" ng-model="description">
+		<button ng-click="searchSnippetsByDescription()">Search</button>
+		<label>Select Language</label>
+		<select ng-change="searchByLanguage(l)" ng-model="l" ng-options="lang.name for lang in languages"></select><br>
+	</div>
+	
 	<div ng-if="status == 'Active'">
-		<h3>Add new Snippetttttt</h3><br>
+		<h3>Add new Snippet</h3><br>
 		<label>Enter description</label>
 		<input type="text" placeholder="Description" ng-model="snippet.description"><br>
 		<label>Enter code</label>
 		<input type="text" placeholder="Code" ng-model="snippet.code"><br>
 		<label>Select Language</label>
-		<select ng-model="language" ng-options="lang.name for lang in languages"></select><br>
+		<select ng-model="language.name" ng-options="lang.name for lang in languages"></select><br>
 		<label>Enter url</label>
 		<input type="text" placeholder="Url" ng-model="snippet.url"><br>
 		<label>Enter expiration</label>

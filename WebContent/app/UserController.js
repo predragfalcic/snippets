@@ -187,18 +187,26 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	
 	$scope.snippet = {};
 	
+	// Language for adding snippet
 	$scope.language = {};
+	
+	// Language for searching snippets
+	$scope.l = {};
+	
+	$scope.description = "";
 	
 	// Add new Snippet
 	$scope.addSnippet = function(snippet){
-		$scope.snippet.language = $scope.language.name;
+		$scope.snippet.language = $scope.language.name.name;
 		var promise = $http.post("rest/users/snippets/add/", $scope.snippet);
 		promise.then(function (response){
 			if(!(response.data.status === "OK")){
 				alert(response.data.status);
 			}
 			$scope.getAllSnippets();
-		});
+		}).catch(function(error){
+        	alert(JSON.stringify(error));
+        });
 	}
 	
 	// Snippets details
@@ -235,6 +243,29 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
         	$scope.getAllSnippets();
         });
 	};
+	
+	// Search function for snippets by description
+	$scope.searchSnippetsByDescription = function(){
+		var promise = $http.get("rest/users/snippets/search/" + $scope.description);
+		promise.then(function (response){
+			if(response.data.status == "No snippets found"){
+				$scope.snippets = [];
+			}else{
+				$scope.snippets = response.data.status;
+			}
+		});
+	}
+	
+	$scope.searchByLanguage = function(l){
+		var promise = $http.get("rest/users/snippets/search/lang/" + l.name);
+		promise.then(function (response){
+			if(response.data.status == "No snippets found"){
+				$scope.snippets = [];
+			}else{
+				$scope.snippets = response.data.status;
+			}
+		});
+	}
 });
 
 //Display snippet details page
