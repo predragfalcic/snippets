@@ -461,6 +461,19 @@ public class UserService {
 		return jo;
 	}
 	
+	/**
+	 * Find the comment in the snippet
+	 * Checks if user has already liked it 
+	 * and if not then likes the comment
+	 * @param s_id
+	 * @param user_id
+	 * @param c
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/snippets/{s_id}/{user_id}/comments/like")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -468,6 +481,25 @@ public class UserService {
 		JSONObject jo = new JSONObject();
 		
 		String response = sr.likeComment(s_id, c, user_id);
+		
+		Snippet s = sr.findSnippetById(s_id);
+		
+		if(response.equals("OK")){
+			jo.put("status", s);
+		}else{
+			jo.put("status", response);
+		}
+		
+		return jo;
+	}
+	
+	@POST
+	@Path("/snippets/{s_id}/{user_id}/comments/dislike")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject dislikeComments(@PathParam("s_id") String s_id, @PathParam("user_id") String user_id, Comment c) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
+		JSONObject jo = new JSONObject();
+		
+		String response = sr.dislikeComment(s_id, c, user_id);
 		
 		Snippet s = sr.findSnippetById(s_id);
 		

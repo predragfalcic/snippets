@@ -308,9 +308,23 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	$scope.likeComment = function(comment, snippet){
 		var promise = $http.post("rest/users/snippets/" + snippet.id + "/" + $scope.userUsername +"/comments/like/", comment);
 		promise.then(function (response){
-			if(response.data.status === "You already liked this comment"){
+			if(response.data.status === "You already gave your grade this comment"){
 				alert(response.data.status);
 			}else{
+				$scope.s = response.data.status;
+				$scope.comments = $scope.s.comments;
+			}
+		})
+	}
+	
+	// Dislike comment
+	$scope.dislikeComment = function(comment, snippet){
+		var promise = $http.post("rest/users/snippets/" + snippet.id + "/" + $scope.userUsername +"/comments/dislike/", comment);
+		promise.then(function (response){
+			if(response.data.status === "You already gave your grade this comment"){
+				alert(response.data.status);
+			}
+			else{
 				$scope.s = response.data.status;
 				$scope.comments = $scope.s.comments;
 			}

@@ -321,11 +321,68 @@ public class SnippetRepository {
 					for (User user : g.getUsers()) {
 //						System.out.println(user.getUsername());
 						if(user.getUsername().equals(user_id)){
-							return "You already liked this comment";
+							return "You already gave your grade this comment";
 						}
 					}
 					// If not then do the rest
 					g.setPositiveClicks(g.getPositiveClicks() + 1);
+					// Set the user who commented it
+					User u = ur.findUserByUsername(user_id);
+//					System.out.println(u.toString());
+					ArrayList<User> gradeUsers = g.getUsers();
+					
+					gradeUsers.add(u);
+					
+					g.setUsers(gradeUsers);
+					c.setGrade(g);
+					
+					rwf.writeSnippetToFile(snippets);
+				}
+			}
+		}
+		
+		return "OK";
+	}
+	
+	/**
+	 * Find comment to dislike
+	 * check if it is already like or disliked
+	 * if not dislike it
+	 * @param id
+	 * @param comment
+	 * @param user_id
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public String dislikeComment(String id, Comment comment, String user_id) throws FileNotFoundException, ClassNotFoundException, IOException{
+		snippets.clear();
+		snippets = rwf.readSnippetFromFile();
+		
+		// Find the comment to like
+		for (Snippet snippet : snippets) {
+			for (Comment c : snippet.getComments()) {
+//				System.out.println(comment.toString());
+				if(c.toString().equals(comment.toString())){
+					// Check if user has already liked comment
+					Grade g = c.getGrade();
+					
+					if(g.getUsers() == null){
+//						System.out.println("Usao je ovde");
+						g.setUsers(new ArrayList<User>());
+					}
+					
+//					System.out.println(g.getUsers());
+					
+					for (User user : g.getUsers()) {
+//						System.out.println(user.getUsername());
+						if(user.getUsername().equals(user_id)){
+							return "You already gave your grade this comment";
+						}
+					}
+					// If not then do the rest
+					g.setNegativeClicks(g.getNegativeClicks() + 1);
 					// Set the user who commented it
 					User u = ur.findUserByUsername(user_id);
 //					System.out.println(u.toString());
