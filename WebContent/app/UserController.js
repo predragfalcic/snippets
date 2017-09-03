@@ -146,6 +146,9 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 snippet.controller('snippetCtrl', function($window, $scope, AuthenticationService, $http, $location){
 	var vm = this;
 	
+	$scope.from_date;
+	$scope.to_date;
+	
 	$scope.snippets = []
 	$scope.languages = {}
 	// Get the role of the logged in user
@@ -244,18 +247,6 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
         });
 	};
 	
-	// Search function for snippets by description
-	$scope.searchSnippetsByDescription = function(){
-		var promise = $http.get("rest/users/snippets/search/" + $scope.description);
-		promise.then(function (response){
-			if(response.data.status == "No snippets found"){
-				$scope.snippets = [];
-			}else{
-				$scope.snippets = response.data.status;
-			}
-		});
-	}
-	
 	$scope.searchByLanguage = function(l){
 		var promise = $http.get("rest/users/snippets/search/lang/" + l.name);
 		promise.then(function (response){
@@ -332,7 +323,7 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 		promise.then(function (response){
 			$scope.s = response.data;
 			$scope.comments = $scope.s.comments;
-		})
+		});
 	}
 	
 	// Like comment
@@ -345,7 +336,7 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 				$scope.s = response.data.status;
 				$scope.comments = $scope.s.comments;
 			}
-		})
+		});
 	}
 	
 	// Dislike comment
@@ -359,7 +350,7 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 				$scope.s = response.data.status;
 				$scope.comments = $scope.s.comments;
 			}
-		})
+		});
 	}
 });
 

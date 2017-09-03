@@ -136,6 +136,8 @@ public class SnippetRepository {
 		
 		snippets.add(newSnippet);
 		
+		System.out.println(newSnippet);
+		
 		rwf.writeSnippetToFile(snippets);
 		return "OK";
 	}
@@ -401,30 +403,6 @@ public class SnippetRepository {
 		}
 		
 		return "OK";
-	}
-	
-	/**
-	 * Find snippets by description and add them to list
-	 * @param desc
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws ClassNotFoundException
-	 * @throws IOException
-	 */
-	public ArrayList<Snippet> searchSnippetsByDescription(String desc) throws FileNotFoundException, ClassNotFoundException, IOException{
-		
-		snippets.clear();
-		snippets = rwf.readSnippetFromFile();
-		
-		ArrayList<Snippet> foundSnippets = new ArrayList<>();
-		
-		for (Snippet snippet : snippets) {
-			if(snippet.getDescription().contains(desc)){
-				foundSnippets.add(snippet);
-			}
-		}
-		
-		return foundSnippets;
 	}
 	
 	/**

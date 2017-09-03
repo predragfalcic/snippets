@@ -294,7 +294,7 @@ public class UserService {
 			snippet.setLanguage("undefined");
 		}
 		
-		System.out.println(snippet.toString());
+//		System.out.println(snippet.toString());
 		String response = sr.addSnippet(snippet.getDescription(), snippet.getCode(), snippet.getLanguage(), snippet.getUrl(), snippet.getExpiration(), request);
 
 		if (response.equals("OK")) {
@@ -407,7 +407,7 @@ public class UserService {
 		ArrayList<Comment> snippetComments = snippet.getComments();
 		
 		// Delete comment from the snippet
-		System.out.println(snippetComments.remove(comment));
+		snippetComments.remove(comment);
 		
 		// Set the new list with comments to snippet
 		snippet.setComments(snippetComments);
@@ -520,32 +520,6 @@ public class UserService {
 			jo.put("status", s);
 		}else{
 			jo.put("status", response);
-		}
-		
-		return jo;
-	}
-	
-	/**
-	 * Find snippets by the given description
-	 * @param desc
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	@GET
-	@Path("/snippets/search/{desc}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject searchSnippetsByDescription(@PathParam("desc") String desc) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException{
-		JSONObject jo = new JSONObject();
-		
-		ArrayList<Snippet> foundSnippets = sr.searchSnippetsByDescription(desc);
-		
-		if(foundSnippets.size() == 0){
-			jo.put("status", "No snippets found");
-		}else{
-			jo.put("status", foundSnippets);
 		}
 		
 		return jo;

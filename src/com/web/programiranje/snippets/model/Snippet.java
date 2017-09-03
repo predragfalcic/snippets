@@ -2,13 +2,11 @@ package com.web.programiranje.snippets.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class Snippet implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String id;
@@ -20,9 +18,11 @@ public class Snippet implements Serializable{
 	private String user; // User that created snippet
 	private Boolean canBeCommented; // Snippet can be commented, default true
 	private ArrayList<Comment> comments; // Comments on this snippets
+	private Date created;
 	
 	public Snippet() {
 		super();
+		this.created = new Date();
 	}
 
 	public Snippet(String description, String code, String language, String url, String expiration, String username) {
@@ -36,6 +36,7 @@ public class Snippet implements Serializable{
 		this.user = username;
 		this.canBeCommented = true;
 		this.comments = new ArrayList<>();
+		this.created = new Date();
 	}
 
 	public String getDescription() {
@@ -109,6 +110,14 @@ public class Snippet implements Serializable{
 	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
+	
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
 	@Override
 	public int hashCode() {
@@ -176,12 +185,12 @@ public class Snippet implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Snippet [id=" + id + ", description=" + description + ", code=" + code + ", language=" + language
 				+ ", url=" + url + ", expiration=" + expiration + ", user=" + user + ", canBeCommented="
-				+ canBeCommented + ", comments=" + comments + "]";
+				+ canBeCommented + ", comments=" + comments + ", created=" + created + "]";
 	}
 
 	public static String generateString(Random rng, String characters, int length)

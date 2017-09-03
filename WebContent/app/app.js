@@ -81,3 +81,45 @@ function run($rootScope, $http, $location, $localStorage, AuthenticationService)
         }
     }
 }
+
+// Custom filter for comparing dates
+snippet.filter('snippetsByDate', function(){
+	return function(items, fromDate, toDate){
+		var filtered = [];
+        //here you will have your desired input
+        var from_date = Date.parse(fromDate);
+        var to_date = Date.parse(toDate);
+        if (from_date == null || toDate == null)
+            filtered = items;
+        else
+            filtered = items.filter(function (item) {
+                return item.created >= from_date && item.created <= to_date;
+            });
+        return filtered;
+	};
+});
+
+//Custom filter for comment likes
+snippet.filter('orderObjectBy', function(){
+    return function(input, attribute) {
+    	
+        if (!angular.isObject(input)) return input;
+
+        var array = [];
+        for(var objectKey in input) {
+            array.push(input[objectKey]);
+        }
+
+        array.sort(function(a, b){
+            a = parseInt(a.grade[attribute]);
+            b = parseInt(b.grade[attribute]);
+            return b - a;
+        });
+        return array;
+    }
+});
+
+
+
+
+

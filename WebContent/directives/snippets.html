@@ -14,7 +14,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="s in snippets">
+			<tr ng-repeat="s in snippets | filter:description | snippetsByDate : from_date : to_date">
 				<td>{{s.description}}</td>
 				<td>{{s.language}}</td>
 				<td>{{s.url}}</td>
@@ -37,9 +37,14 @@
 	<div>
 		<h3>Enter description or some text from description of the snippet you want to find</h3>
 		<input type="text" placeholder="Description" ng-model="description">
-		<button ng-click="searchSnippetsByDescription()">Search</button>
-		<label>Select Language</label>
+		<button ng-click="searchSnippetsByDescription()">Search</button><br>
+		<label>Filter by Language</label>
 		<select ng-change="searchByLanguage(l)" ng-model="l" ng-options="lang.name for lang in languages"></select><br>
+		<label>Filter snippets by date</label><br>
+		<label>From: </label>
+		<input type="date" ng-model="from_date"><br>
+		<label>To: </label>
+		<input type="date" ng-model="to_date">
 	</div>
 	
 	<div ng-if="status == 'Active'">
