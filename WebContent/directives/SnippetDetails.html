@@ -27,7 +27,8 @@
 		<button ng-click="addComment(s, comment)">Comment</button><br>
 	</div>
 	<h4>What other people think</h4>
-	<div ng-repeat="c in comments | orderObjectBy: 'positiveClicks'">
+	<button ng-click="order = 'positiveClicks'">Sort comment by likes</button>
+	<div ng-repeat="c in comments | orderObjectBy: order">
 		<label>Comment by: {{c.user}}</label><br>
 		<label>On: {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</label><br>
 		<textarea readonly="readonly">{{c.text}}</textarea><br>

@@ -275,6 +275,9 @@ snippet.controller('snippetDetailsCtrl', function($window, $scope, Authenticatio
 	// Username of the user that is online
 	$scope.userUsername;
 	
+	// Set the argument by which comments should be sorted
+	$scope.order = '';
+	
 	// Get the selected snippet from database and display it's details
 	$scope.getSnippet = function(){
 		$http.get('rest/users/snippets/details/' + $window.sessionStorage.snippet_id)
