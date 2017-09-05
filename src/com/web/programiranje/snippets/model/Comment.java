@@ -14,17 +14,19 @@ public class Comment implements Serializable{
 	private String user; // User who commented
 	private Date dateTimeCommented;
 	private Grade grade;
+	private String userImage = "";
 	
 	public Comment() {
 		super();
 	}
 
-	public Comment(String text, String user, Date dateTimeCommented, Grade grade) {
+	public Comment(String text, String user, Date dateTimeCommented, Grade grade, String img) {
 		super();
 		this.text = text;
 		this.user = user;
 		this.dateTimeCommented = dateTimeCommented;
 		this.grade = grade;
+		this.userImage = img;
 	}
 
 	public String getText() {
@@ -100,6 +102,14 @@ public class Comment implements Serializable{
 
 	public void setGrade(Grade grade) {
 		this.grade = grade;
+	}
+
+	public String getUserImage() {
+		return userImage;
+	}
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
 	}
 
 	@Override

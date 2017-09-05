@@ -1,40 +1,87 @@
-<div ng-controller="snippetDetailsCtrl">
-	<a href="#/logout" ng-click="logout()">Logout</a>
-	<h3>Snippets details</h3>
-	<table>
-		<thead>
-			<tr>
-				<th>Description</th>
-				<th>Language</th>
-				<th>Url</th>
-				<th>User</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{s.description}}</td>
-				<td>{{s.language}}</td>
-				<td>{{s.url}}</td>
-				<td>{{s.user}}</td>
-			</tr>
-		</tbody>
-	</table>
+<div ng-controller="snippetDetailsCtrl" class="container col-md-6 col-md-offset-3 text-center">
+	<div class="col-md-3">
+		<a href="#/logout" ng-click="logout()">Logout</a>
+		<a ng-if="userRole == 'admin'" href="#/admin">Profile</a>
+		<a ng-if="userRole == 'regUser'" href="#/profile">Profile</a>
+	</div>
+	<br> <br>
+	<h3>Snippet details</h3>
+	<label class="control-label" for="inputSmall">Snippet created by: {{s.user}}, on: {{s.created | date:'MM/dd/yyyy'}}</label>
+	<div class="panel panel-default">
+		<div class="panel-heading">Snippet description</div>
+		<div class="panel-body">{{s.description}}</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">Snippet code</div>
+		<div class="panel-body">{{s.code}}</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">Snippet language</div>
+		<div class="panel-body">{{s.language}}</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Snippet url</div>
+		<div class="panel-body">{{s.url}}</div>
+	</div>
 	<br>
-	<div ng-if="s.canBeCommented == true && status == 'Active'">
-		<p>Tell us what you think about this snippettttt</p>
-		<label>Your comment</label><br>
-		<input type="text" ng-model="comment.text"><br>
-		<button ng-click="addComment(s, comment)">Comment</button><br>
+	<div ng-if="s.canBeCommented == true && status == 'Active'" class="row">
+		<h4>Tell us what you think about this snippet</h4>
+		<label class="control-label" for="inputSmall">Your comment</label><br>
+		<input class="form-control input-sm" type="text" ng-model="comment.text"><br>
+		<button class="btn btn-primary" ng-click="addComment(s, comment)">Comment</button><br>
 	</div>
 	<h4>What other people think</h4>
-	<button ng-click="order = 'positiveClicks'">Sort comment by likes</button>
-	<div ng-repeat="c in comments | orderObjectBy: order">
-		<label>Comment by: {{c.user}}</label><br>
-		<label>On: {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</label><br>
-		<textarea readonly="readonly">{{c.text}}</textarea><br>
-		<label>Number of positive grades: {{ c.grade.positiveClicks }}</label><a href="" ng-if="role != 'Guest'" ng-click="likeComment(c, s)">Like</a><br>
-		<label>Number of negative grades: {{ c.grade.negativeClicks }}</label><a href="" ng-if="role != 'Guest'" ng-click="dislikeComment(c, s)">Dislike</a><br>
-		<button ng-if="role == 'admin' || (role == 'regUser' && c.user == userUsername)" ng-click="deleteComment(c, s)">Delete comment</button>
-		<hr>
+	<button class="btn btn-success text-right" ng-click="order = 'positiveClicks'">Sort comment by likes</button>
+	<br><br>
+	<div class="row">
+		<div class="row" ng-repeat="c in comments | orderObjectBy: order">
+			<div class="col-md-2 col-sm-2 hidden-xs">
+              <figure class="thumbnail">
+              	<img class="img-responsive" ng-if="c.userImage == 'guestProfileImage'" ng-src="img/default.png"/>
+              	<img class="img-responsive" ng-if="c.userImage != 'guestProfileImage'" ng-src="img/{{c.userImage}}"/>
+              </figure>
+            </div>
+            <div class="col-md-10 col-sm-10">
+              <div class="panel panel-default arrow left">
+                <div class="panel-body">
+                  <header class="text-left">
+                    <div class="comment-user"><i class="fa fa-user"></i> {{c.user}}</div>
+                    <time class="comment-date"><i class="fa fa-clock-o"></i> {{c.dateTimeCommented | date:'MM/dd/yyyy HH:mm'}}</time>
+                  </header>
+                  <div class="comment-post">
+                    <p>
+                      {{c.text}}
+                    </p>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <p class="text-right"><i class="fa fa-reply"></i> {{ c.grade.positiveClicks }}<a href="" ng-if="role != 'Guest'" ng-click="likeComment(c, s)" class="glyphicon glyphicon-thumbs-up"></a></p>
+            <p class="text-right"><i class="fa fa-reply"></i> {{ c.grade.negativeClicks }}<a href="" ng-if="role != 'Guest'" ng-click="dislikeComment(c, s)" class="glyphicon glyphicon-thumbs-down"></a></p>
+            <button class="btn btn-danger" ng-if="role == 'admin' || (role == 'regUser' && c.user == userUsername)" ng-click="deleteComment(c, s)">Delete comment</button>
+			<hr>
+		</div>
 	</div>
 </div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

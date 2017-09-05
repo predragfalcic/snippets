@@ -1,6 +1,14 @@
-<div ng-controller="adminCtrl">
+<div ng-controller="adminCtrl" class="container col-md-6 col-md-offset-3 text-center">
+
+	<div class="col-md-3">
+		<a href="#/snippets">Snippets</a><br>
+		<a href="#/logout" ng-click="logout()">Logout</a>
+	</div>
+
+	<br> <br>
 	<h3>All users</h3>
-	<table>
+	<p>In the table are displayed all users that are registered. You can see their status and block them by clicking the button.</p>
+	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th>Username</th>
@@ -10,38 +18,40 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="user in users">
+			<tr ng-repeat="user in users | filter:u">
 				<td>{{user.username}}</td>
 				<td>{{user.role}}</td>
 				<td>{{user.status}}</td>
 				<td>
-					<button type="button" ng-if="user.status == 'Active'" ng-click="blockUser(user)">Block</button>
-					<button type="button" ng-if="user.status == 'Blocked'" ng-click="unblockUser(user)">Unblock</button>
+					<button type="button" ng-if="user.status == 'Active'"
+						ng-click="blockUser(user)">
+						<span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+					</button>
+					<button type="button" ng-if="user.status == 'Blocked'"
+						ng-click="unblockUser(user)">
+						<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+					</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	<br>
+	<h3>Enter users's username or some part of it to search them.</h3>
+		<input class="form-control" type="text" placeholder="User's username" ng-model="u.username">
+	<br>
 	
 	<h3>All languages</h3>
-	<table>
-		<thead>
-			<tr>
-				<th>Name</th>
-			</tr>
-		</thead>
+	<table class="table table-striped table-hover">
 		<tbody>
 			<tr ng-repeat="language in languages">
 				<td>{{language.name}}</td>
 			</tr>
 		</tbody>
 	</table>
-	
-	<div>
+	<div class="form-group">
 		<h3>Add new Language</h3>
-		<label>Enter the name of the language</label>
-		<input type="text" placeholder="Name of the language" ng-model="language.name">
-		<button ng-click="addLanguage(language)">Add language</button>
+		<label class="control-label" for="inputSmall">Enter the name of the language</label>
+		<input class="form-control input-sm" type="text" placeholder="Name of the language" ng-model="language.name">
+		<button class="btn btn-primary" ng-click="addLanguage(language)">Add language</button>
 	</div>
-	<a href="#/snippets">Snippets</a><br>
-	<a href="#/logout" ng-click="logout()">Logout</a>
 </div>

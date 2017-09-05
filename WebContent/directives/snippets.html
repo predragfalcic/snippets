@@ -1,10 +1,16 @@
-<div ng-controller="snippetCtrl">
-	<a href="#/logout" ng-click="logout()">Logout</a>
+<div ng-controller="snippetCtrl" class="container col-md-6 col-md-offset-3 text-center">
+	<div class="col-md-3">
+		<a href="#/logout" ng-click="logout()">Logout</a>
+		<a ng-if="userRole == 'admin'" href="#/admin">Profile</a>
+		<a ng-if="userRole == 'regUser'" href="#/profile">Profile</a>
+	</div>
+	<br> <br>
+	
 	<h3>All snippets</h3>
-	<table>
+	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
-				<th>Description</th>
+				<th>Descriptionnnnnn</th>
 				<th>Language</th>
 				<th>Url</th>
 				<th>User</th>
@@ -14,52 +20,51 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="s in snippets | filter:description | snippetsByDate : from_date : to_date">
+			<tr ng-repeat="s in snippets | filter:s | snippetsByDate : from_date : to_date">
 				<td>{{s.description}}</td>
 				<td>{{s.language}}</td>
 				<td>{{s.url}}</td>
 				<td>{{s.user}}</td>
 				<td>
-					<a href="" type="button" ng-click="detailsSnippet(s)">Details</a>
+					<a href="" type="button" ng-click="detailsSnippet(s)"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
 				</td>
 				<td>
-					<a ng-if="userRole == 'admin'" href="" type="button" ng-click="deleteSnippet(s)">Delete</a>
+					<a ng-if="userRole == 'admin'" href="" type="button" ng-click="deleteSnippet(s)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 				</td>
 				<td>
-					<a ng-if="userRole == 'admin' && s.canBeCommented == true" href="" type="button" ng-click="blockComments(s)">Disable</a>
-					<a ng-if="userRole == 'admin' && s.canBeCommented == false" href="" type="button" ng-click="unblockComments(s)">Enable</a>
+					<a ng-if="userRole == 'admin' && s.canBeCommented == true" href="" type="button" ng-click="blockComments(s)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></a>
+					<a ng-if="userRole == 'admin' && s.canBeCommented == false" href="" type="button" ng-click="unblockComments(s)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
 	<!-- Search snippets by description -->
-	<div>
-		<h3>Enter description or some text from description of the snippet you want to find</h3>
-		<input type="text" placeholder="Description" ng-model="description">
-		<button ng-click="searchSnippetsByDescription()">Search</button><br>
-		<label>Filter by Language</label>
-		<select ng-change="searchByLanguage(l)" ng-model="l" ng-options="lang.name for lang in languages"></select><br>
-		<label>Filter snippets by date</label><br>
-		<label>From: </label>
-		<input type="date" ng-model="from_date"><br>
-		<label>To: </label>
-		<input type="date" ng-model="to_date">
+	<h3>Filter snippets</h3>
+	<div class="form-group">
+		<label class="control-label" for="inputSmall">Enter description or some text from description of the snippet you want to find</label>
+		<input class="form-control input-sm" type="text" placeholder="Description" ng-model="s.description">
+		<label for="select" class="control-label" for="inputSmall">Filter by Language</label>
+		<select class="form-control" ng-change="searchByLanguage(l)" ng-model="l" ng-options="lang.name for lang in languages"></select><br>
+		<label class="control-label" for="inputSmall">Filter snippets by date</label><br>
+		<label class="control-label" for="inputSmall" >From: </label>
+        <input ng-model="from_date" type='date' class="form-control input-sm" />
+		<label class="control-label" for="inputSmall">To: </label>
+        <input ng-model="to_date" type="date" class="form-control input-sm" />
 	</div>
-	
-	<div ng-if="status == 'Active'">
+	<div class="form-group" ng-if="status == 'Active'">
 		<h3>Add new Snippet</h3><br>
-		<label>Enter description</label>
-		<input type="text" placeholder="Description" ng-model="snippet.description"><br>
-		<label>Enter code</label>
-		<input type="text" placeholder="Code" ng-model="snippet.code"><br>
-		<label>Select Language</label>
-		<select ng-model="language.name" ng-options="lang.name for lang in languages"></select><br>
-		<label>Enter url</label>
-		<input type="text" placeholder="Url" ng-model="snippet.url"><br>
-		<label>Enter expiration</label>
-		<input type="text" placeholder="Expiration" ng-model="snippet.expiration"><br>
-		<button ng-click="addSnippet(snippet)">Add snippet</button>
+		<label class="control-label" for="inputSmall">Enter description</label>
+		<input class="form-control input-sm" type="text" placeholder="Description" ng-model="snippet.description"><br>
+		<label for="textArea" class="control-label">Enter code</label>
+		<textarea class="form-control" rows="3" id="textArea" type="text" placeholder="Code" ng-model="snippet.code"></textarea><br>
+		<label for="select" class="control-label">Select Language</label>
+		<select class="form-control" ng-model="language.name" ng-options="lang.name for lang in languages"></select><br>
+		<label class="control-label" for="inputSmall">Enter url</label>
+		<input class="form-control input-sm" type="text" placeholder="Url" ng-model="snippet.url"><br>
+		<label class="control-label" for="inputSmall">Enter expiration</label>
+		<input class="form-control input-sm" type="number" placeholder="Expiration" ng-model="snippet.expiration"><br>
+		<button class="btn btn-primary" ng-click="addSnippet(snippet)">Add snippet</button>
 	</div>
 	
 </div>

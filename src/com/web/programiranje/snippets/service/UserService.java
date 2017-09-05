@@ -37,8 +37,7 @@ public class UserService {
 	private UserRepository userRepository = new UserRepository();
 	private LanguageRepository lr = new LanguageRepository();
 	private SnippetRepository sr = new SnippetRepository();
-	
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users//Privat//Desktop//Web Programiranje//img//";
+	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users//Privat//Desktop//Web Programiranje//Projekat//WebContent//img//";
 	private static final String DEFAULT_IMAGE = "C://Users//Privat//Desktop//Web Programiranje//img//default.png";
 	
 	@Context
@@ -371,9 +370,26 @@ public class UserService {
 		// Get all snippet comments
 		ArrayList<Comment> snippetComments = snippet.getComments();
 	
-		// Add new comment to the list
-		snippetComments.add(new Comment(comment.getText(), comment.getUser(), new Date(), new Grade()));
+		// Find user by username if username is not Guest
+		User u = null;
+		if(!comment.getUser().equals("Guest") && !comment.getUser().equals("admin")){
+			u = userRepository.findUserByUsername(comment.getUser());
+		}
 		
+		if(u != null ){
+			System.out.println("Korisnikova slika " + u.getProfileImage());
+			String image = "";
+			if(u.getProfileImage() == null){
+				image = "guestProfileImage";
+			}else{
+				image = comment.getUser() + u.getProfileImage();
+			}
+			System.out.println("Korisnikova slika " + image);
+			// Add new comment to the list
+			snippetComments.add(new Comment(comment.getText(), comment.getUser(), new Date(), new Grade(), image));
+		}else{
+			snippetComments.add(new Comment(comment.getText(), comment.getUser(), new Date(), new Grade(), "guestProfileImage"));
+		}
 		// Set the new list with comments to snippet
 		snippet.setComments(snippetComments);
 		

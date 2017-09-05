@@ -3,8 +3,6 @@
  */
 
 snippet.controller('registerCtrl', function($scope, AuthenticationService, $http) {
-	alert("current User: " + JSON.stringify(AuthenticationService.getCurrentUser()));
-	
 	// Write user to file
 	$scope.uploadFile = function(files) {
         $scope.user.file = files[0];
@@ -97,6 +95,8 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 	$scope.users = []
 	$scope.languages = []
 	
+	$scope.username = "";
+	
 	// Get all registered users
 	$scope.getAllRegUsers = function() {
 		$http.get('rest/users/all')
@@ -136,7 +136,7 @@ snippet.controller('adminCtrl', function($scope, AuthenticationService, $http, $
 	$scope.addLanguage = function(language){
 		var promise = $http.post("rest/users/languages/add/" + language.name);
 		promise.then(function (response){
-			alert("language add: " + JSON.stringify(response.data));
+//			alert("language add: " + JSON.stringify(response.data));
 			$scope.getAllLanguages();
 		});
 	}
@@ -157,6 +157,8 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 	
 	// Status to check if user is blocked 
 	$scope.status;
+	
+	$scope.img = "";
 	
 	if(AuthenticationService.getCurrentUser() === undefined){
 		$scope.userRole = "Guest";
@@ -231,7 +233,7 @@ snippet.controller('snippetCtrl', function($window, $scope, AuthenticationServic
 //		alert("Snippet to be blocked " + snippet);
 		var promise = $http.post("rest/users/snippets/comments/block/", snippet);
         promise.then(function (response) {
-        	alert(response.data);
+//        	alert(response.data);
         	$scope.getAllSnippets();
         })
         .catch(function(error){

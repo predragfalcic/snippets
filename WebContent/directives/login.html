@@ -1,5 +1,10 @@
-<div ng-controller="loginCtrl">
-	<input type="text" ng-model="user.username" placeholder="Username" name="username"><br>
-	<input type="password" ng-model="user.password" placeholder="Password" name="password"><br>
-	<button ng-click="login()">Login</button>
+<div ng-controller="loginCtrl" class="container col-md-6 col-md-offset-3 text-center">
+	<div class="form-group">
+		<label class="control-label" for="inputSmall">Enter username</label>
+		<input class="form-control input-sm" type="text" ng-model="user.username" placeholder="Username" name="username"><br>
+		<label class="control-label" for="inputSmall">Enter password</label>
+		<input class="form-control input-sm" type="password" ng-model="user.password" placeholder="Password" name="password"><br>
+		<button class="btn btn-primary" ng-click="login()">Login</button>
+		<a href="#/registration">Don't have account? Register here</a>
+	</div>
 </div>
